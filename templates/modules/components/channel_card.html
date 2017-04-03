@@ -1,0 +1,21 @@
+<div class="col-md-3">
+    <img class="img-thumbnail" src="{{ channel.channelInfo.thumbnails.default.url }}">
+</div>
+<div class="col-md-9">
+    <h3>
+        <a href="{{ channel.channelUrl }}">
+            {{ channel.channelInfo.channelTitle }}
+        </a>
+    </h3>
+    <p>
+        Количество видео: {{ channel.statistics.videoCount }}
+    </p>
+    <p>
+        Количество просмотров/комментариев: {{ channel.statistics.viewCount }}/{{ channel.statistics.commentCount }}
+    </p>
+    {% if dislikeRate %}
+        <p>
+            Процент дизлайков: {{ dislikeRate }}%
+        </p>
+    {% endif %}
+</div>

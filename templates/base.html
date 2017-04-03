@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Ad Ytools | Dashboard</title>
+
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/font-awesome/css/font-awesome.css" rel="stylesheet">
+
+    <link href="/css/animate.css" rel="stylesheet">
+    <link href="/css/style.css" rel="stylesheet">
+
+    {% block page_head %}
+    {% endblock %}
+</head>
+
+<body>
+
+<div id="wrapper">
+    <div class="border-bottom">
+        <nav class="navbar navbar-static-top" role="navigation" style="margin-bottom: 0">
+                <div class="navbar-header">
+                    <a class="navbar-minimalize minimalize-styl-2 btn"
+                       href="#"><i class="fa fa-bars"></i> </a>
+                    <a class="navbar-minimalize minimalize-styl-2"
+                       href="#">
+                        {% include 'logo.html' %}
+                    </a>
+                </div>
+                <ul class="nav navbar-top-links navbar-right">
+                    {% if expiry_in_days < 5 %}
+                    <li>
+                       <a href="plain" class="count-info">
+                           <div class="btn btn-primary btn-xs">
+                               Продлить пакет услуг
+                           </div>
+                       </a>
+                    </li>
+                    {% endif %}
+                    <li>
+                        <a
+                                href="accounts/profile"
+                                class="count-info"
+                                style="color: #333"
+                            >
+                                {{ user_email }}
+                            </a>
+{#                        <div>#}
+                    </li>
+                    <li>
+                            {% if expiry_in_days < 5 %}
+                            <span class="label label-warning">
+                            {% elif expiry_in_days < 10 %}
+                            <span class="label label-warning-light">
+                            {% elif expiry_in_days < 20 %}
+                            <span class="label label-default">
+                            {% else %}
+                            <span class="label label-success">
+                            {% endif %}
+                                Осталось {{ expiry_in_days }} дней
+                            </span>
+{#                        </div>#}
+                    </li>
+                </ul>
+
+            </nav>
+    </div>
+
+    <nav class="navbar-default navbar-static-side" role="navigation">
+        <div class="sidebar-collapse">
+            <ul class="nav" id="side-menu">
+                <li>
+                    <a href="/index">
+                        <i class="fa fa-th-large"></i>
+                        <span class="nav-label">Главная</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/module?feature=smart_search">
+                        <i class="fa fa-search" aria-hidden="true"></i>
+                        <span class="nav-label">Умный поиск</span>
+                    </a>
+                </li>
+                {% for p in plains %}
+                    <li>
+                        <a href="/plain">
+                            <i class="fa {{ p.icon }}" aria-hidden="true">
+                            </i>
+                            <span class="nav-label">Пакет {{ p.title }}</span>
+                        </a>
+                    </li>
+                {% endfor %}
+                {% for item_name, permission, subitems in menu_items %}
+                    <li>
+                        <a>
+                            <i class="fa {% if permission %}fa-unlock{% else %}fa-lock{% endif %}"></i>
+                            <span class="nav-label">{{ item_name }}</span>
+                            <span class="fa arrow"></span>
+                        </a>
+                        <ul class="nav nav-second-level">
+                            {% for su_title, href in subitems %}
+                                <li {% if not permission %}class="disabled"{% endif %}>
+                                    <a {% if permission %}href={{ href }}{% endif %}>
+                                        {{ su_title }}
+                                    </a>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </li>
+                {% endfor %}
+            </ul>
+
+        </div>
+    </nav>
+
+    <div id="page-wrapper" class="gray-bg">
+        <div class="padded-container container-fluid">
+            <div class="col-lg-12">
+                <div class="page-title animated fadeInRight">
+                    <h2>
+                        {% block page_title %}
+                        {% endblock %}
+                    </h2>
+                    {#<hr class="hr-line-solid">#}
+{#                    <hr style="margin-bottom: 0px">#}
+                </div>
+                <div
+                    class="page-container animated fadeInRight"
+                    {% if disable_page_bg %}
+                        style="background: transparent"
+                    {% endif %}
+                >
+                    {% for e in result.errors %}
+                        <div class="alert alert-danger">
+                            {{ e }}
+                        </div>
+                    {% endfor %}
+
+                    {% block page_content %}
+                    {% endblock %}
+                </div>
+            </div>
+        </div>
+        <div class="footer fixed">
+            <div class="pull-right">
+                <span>О сервисе</span>
+                <span>Помощь</span>
+                <span>Конденфинициальность</span>
+            </div>
+            <div>
+                <span style="font-size: 20px; font-weight: bold">Ad
+                    <span style="
+                        margin-left: -4px;
+                        background-color: #DB0100;
+                        color: white;
+                        padding-left: 5px;
+                        padding-right: 5px;
+                        border-radius: 10px;
+                    ">
+                        <span style="color: #333; margin-right: -4px">Y</span>
+                        tools
+                    </span>
+                </span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Mainly scripts -->
+<script src="/js/jquery-2.1.1.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/plugins/metisMenu/jquery.metisMenu.js"></script>
+<script src="/js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+
+<!-- Custom and plugin javascript -->
+<script src="/js/inspinia.js"></script>
+<script src="/js/plugins/pace/pace.min.js"></script>
+
+<script src="/js/plugins/sweetalert/sweetalert.min.js"></script>
+<link rel="stylesheet" href="/css/plugins/sweetalert/sweetalert.css">
+
+<script src="/js/plugins/touchspin/jquery.bootstrap-touchspin.js"></script>
+<link rel="stylesheet" href="/css/plugins/touchspin/jquery.bootstrap-touchspin.css">
+
+<script src="/js/plugins/moment/moment.js"></script>
+
+<script type="text/javascript" src="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.js"></script>
+<link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.css" />
+
+{% block scipts %}
+{% endblock %}
+
+</body>
+
+</html>

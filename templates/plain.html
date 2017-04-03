@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+
+{% block page_title %}
+    План подписки
+{% endblock %}
+
+
+{% block page_content %}
+
+<div class="row">
+    {% for plain in plains %}
+    <div class="col-md-4">
+        {% include 'modules/components/plain_view.html' with plain=plain %}
+    </div>
+    {% endfor %}
+</div>
+
+<form
+    style="position: absolute; left: -9999px; width: 1px; height: 1px;" tabindex="-1"
+    name="plain_form" method="post" id="plain_form"
+>
+    <input name="plain" type="text" id="plain_name" />
+    <input class="pseudo" type="submit" />
+</form>
+
+{% endblock %}
+
+{% block scipts %}
+<script>
+
+$('.pseudo').click(function () {
+    $('#plain_form').submit();
+});
+
+{% if result.status %}
+swal({
+    title: "{{ result.details }} приобретён!",
+    text: "Теперь вы имеете все вохможности плана \"{{ result.details }}\"",
+    type: "success"
+});
+
+{% endif %}
+
+</script>
+{% endblock %}

@@ -1,0 +1,213 @@
+{% extends 'base.html' %}
+
+{% block page_title %}
+    Профиль {{ profile.channelInfo.title }}
+{% endblock %}
+
+{% block page_content %}
+    <style xmlns:mailto="http://www.w3.org/1999/xhtml">
+        .plain-logo {
+            text-align: center;
+            padding: 50px;
+            background-color: #f8f8f9;
+            color: #bebec3;
+            font-weight: 600;
+            font-size: 85px;
+        }
+
+        .b-rad {
+            border-radius: 8px;
+        }
+
+        .m-t-b-xs-i {
+            margin: 5px 0 !important;
+        }
+
+        .m-t-b-l-i {
+            margin: 20px 0 !important;
+        }
+
+        .m-b-m-i {
+            margin-bottom: 15px !important;
+        }
+    </style>
+
+    <div class="row m-b-lg m-t-lg">
+        <div class="col-md-3 profile-image text-center">
+            <img
+                    src="{{ yt_profile.channelInfo.thumbnails.medium.url }}"
+                    class="img-circle circle-border m-b-md"
+                    alt="profile"
+                    style="width: 100%; max-width: 80%; min-width: 50px;"
+            >
+            <div class="ibox">
+                <div class="ibox-content">
+                    <h1 class="m-b-m-i">
+                        {{ yt_profile.channelInfo.channelTitle }}
+                    </h1>
+                    <h3 class="m-t-b-xs-i p-xxs bg-primary b-rad">
+                        <a href="{{ yt_profile.channelUrl }}"
+                           style="color: inherit;">
+                            <i class="fa fa-youtube-play"
+                               aria-hidden="true"></i>
+                            Ссылка на канал
+                        </a>
+                    </h3>
+                    <h3 class="m-t-b-xs-i p-xxs bg-info b-rad">
+                        <a href="{{ user.email }}" style="color: inherit;">
+                            <i class="fa fa-envelope" aria-hidden="true"></i>
+                            {{ user.email }}
+                        </a>
+                    </h3>
+                    <small>
+                        {{ yt_profile.channelInfo.channelDescription }}
+                    </small>
+
+                    <h4 class="m-t-b-l-i">
+                        Дата регистрации
+                        <strong>{{ user.date_joined|date:"d-m-Y" }}</strong>
+                    </h4>
+                    <div class="m-t">
+                        <a class="btn btn-danger btn-xs" onclick="ensure_exit()">
+                            Выйти
+                        </a>
+                        <a class="btn btn-warning btn-xs" onclick="ensure_reset_password()">
+                            Сменить пароль
+                        </a>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-5">
+            <div class="ibox">
+                <div class="ibox-content">
+                    <h2>Статистика канала</h2>
+                    {% with stat=yt_profile.statistics %}
+                        <table class="table m-b-xs">
+                            <tbody>
+                            <tr>
+                                <td>
+                                    <i class="fa fa-video-camera"
+                                       aria-hidden="true"></i>
+                                    <strong>{{ stat.videoCount }}</strong>
+                                </td>
+                                <td>
+                                    <i class="fa fa-users"
+                                       aria-hidden="true"></i>
+                                    <strong>{{ stat.subscriberCount }}</strong>
+                                </td>
+
+                            </tr>
+                            <tr>
+                                <td>
+                                    <i class="fa fa-comments"
+                                       aria-hidden="true"></i>
+                                    <strong>{{ stat.commentCount }}</strong>
+                                </td>
+                                <td>
+                                    <i class="fa fa-eye" aria-hidden="true"></i>
+                                    <strong>{{ stat.viewCount }}</strong>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    {% endwith %}
+                    <h2>История запросов</h2>
+                    <div class="menu">
+                        <div class="panel list-group">
+                            {% for uh in usage_history %}
+                                <a class="list-group-item"
+                                   data-toggle="collapse" data-target="#{{ uh.datetime_used|date:'u' }}"
+                                   data-parent="#menu">
+                                    <strong>{{ uh.feature.feature_title }}</strong>
+                                    <label class="pull-right">
+                                        {{ uh.datetime_used|date:'d-m-Y H:i' }}
+                                    </label>
+                                </a>
+                                <div id="{{ uh.datetime_used|date:'u' }}" class="sublinks collapse">
+                                    {% for p in uh.parameters %}
+                                        <a class="list-group-item small">
+                                            {{ p.title }}
+                                            <span class="label label-info pull-right">
+                                                {{ p.value }}
+                                            </span>
+                                        </a>
+                                    {% endfor %}
+                                </div>
+                            {% empty %}
+                                <h3 class="text-center m-l">
+                                    Вы не совершали запросов
+                                </h3>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="ibox">
+                <div class="ibox-content">
+                    {% with plain=p_profile.account_type.plain %}
+                        <h2>
+                            Подписка
+                            <strong>
+                                {{ plain.title }}
+                            </strong>
+                        </h2>
+                        <div style="margin: 0 -20px -20px -20px">
+                            <div class="plain-logo">
+                                <i class="fa {{ plain.fa_icon_name }}"
+                                   aria-hidden="true"></i>
+                            </div>
+                            <div class="product-desc">
+                            <span class="product-price label-success">
+                                {{ p_profile.account_type.day_excess }} дня осталось
+                            </span>
+                            </div>
+                        </div>
+                    {% endwith %}
+                </div>
+            </div>
+        </div>
+
+    </div>
+{% endblock %}
+
+{% block scipts %}
+<script>
+function ensure_exit() {
+    swal(
+        {
+            title: "Вы уверенны?",
+            text: "Вы действительно хотите выйти из своего аккаунта?",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#DD6B55",
+            confirmButtonText: "Да, выйти!",
+            closeOnConfirm: false
+        },
+        function() {
+            window.location.href = 'logout'
+        }
+    );
+}
+function ensure_reset_password() {
+    swal(
+        {
+            title: "Вы уверенны?",
+            text: "Вы действительно хотите сменить пароль?",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#DD6B55",
+            confirmButtonText: "Да, сменить.",
+            closeOnConfirm: false
+        },
+        function() {
+            window.location.href = 'change_password'
+        }
+    );
+}
+</script>
+{% endblock %}

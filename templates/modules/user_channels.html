@@ -1,0 +1,102 @@
+{% extends 'base.html' %}
+
+{% block page_head %}
+<link href="css/plugins/jasny/jasny-bootstrap.min.css" rel="stylesheet">
+{% endblock %}
+
+{% block page_title %}
+Каналы пользователей
+{% endblock %}
+
+{% block page_content %}
+
+<div class="container-fluid">
+    <form
+        class="form-horizontal"
+        method="post"
+        action="module?feature=user_channels"
+        enctype="multipart/form-data"
+    >
+        <div class="col-md-4">
+            <label class="control-label">Выбрать соцсеть</label>
+            <select id="social" name="social" class="form-control">
+                <option value="VK">VK</option>
+                <option value="Facebook">Facebook</option>
+                <option value="Instagram">Instagram</option>
+                <option value="Odnoklassniki">Odnoklassniki</option>
+            </select>
+            {{ form.errors.social }}
+        </div>
+
+        <div class="col-md-4">
+            <label class="control-label">Выбрать файл</label>
+            <div class="fileinput fileinput-new input-group" data-provides="fileinput">
+                <div class="form-control" data-trigger="fileinput">
+                    <i class="glyphicon glyphicon-file fileinput-exists"></i>
+                <span class="fileinput-filename" style="overflow: hidden"></span>
+                </div>
+                <span class="input-group-addon btn btn-default btn-file">
+                    <span class="fileinput-new">Select file</span>
+                    <span class="fileinput-exists">Change</span>
+                    <input type="file" name="links" id="links"/>
+                </span>
+                <a href="#" class="input-group-addon btn btn-default fileinput-exists"
+                   data-dismiss="fileinput">
+                    Remove
+                </a>
+            </div>
+            {{ form.errors.links }}
+        </div>
+        <div class="col-md-4">
+            <label class="control-label" style="color: transparent">
+                .
+            </label>
+            <div>
+                <input
+                    type="submit" value="Найти каналы" class="btn btn-primary"
+                >
+            </div>
+        </div>
+    </form>
+</div>
+
+{% if result.status %}
+    <div class="page-title wrapped">
+        <h2>
+            Результаты
+        </h2>
+    </div>
+    <table class="table">
+    <thead>
+      <tr>
+        <th>Ссылка соцсети</th>
+        <th>Ссылка канала</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for c in result.details %}
+      <tr>
+        <td>
+            <a href="{{ c.social_link }}">
+                {{ c.social_link }}
+            </a>
+        </td>
+        <td>
+            {% for channel in c.channel %}
+                <a href="{{ channel.channelUrl }}">
+                    {{ channel.channelUrl }}
+                </a>
+            {% endfor %}
+        </td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+{% endif %}
+
+{% endblock %}
+
+
+{% block scipts %}
+<script src="js/plugins/jasny/jasny-bootstrap.min.js"></script>
+{% endblock %}

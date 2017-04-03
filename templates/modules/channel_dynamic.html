@@ -1,0 +1,180 @@
+{% extends 'base.html' %}
+
+{% block page_head %}
+<link href="css/plugins/morris/morris-0.4.3.min.css" rel="stylesheet">
+{% endblock %}
+
+{% block page_title %}
+Динамика канала
+{% endblock %}
+
+{% block page_content %}
+<div class="container-fluid">
+    <form class="form-horizontal" method="post">
+        <div class="input-group m-b">
+            <span class="input-group-addon">
+                <i class="fa fa-search" aria-hidden="true"></i>
+            </span>
+            <input
+                name="channel_link"
+                type="text"
+                placeholder="ID канала или его ссылка"
+                class="form-control"
+            >
+            <span class="input-group-btn">
+                <input type="submit" class="btn btn-primary" value="Получить">
+            </span>
+        </div>
+    </form>
+</div>
+
+{% if result.status %}
+<div class="page-title wrapped m-b-lg">
+    <h2>
+        Результаты
+    </h2>
+</div>
+
+<div class="row m-b-lg">
+    <div class="col-md-6">
+        {% include 'modules/components/channel_card.html' with channel=result.details.channel dislikeRate=result.details.dislikeRate %}
+    </div>
+</div>
+<div class="page-title wrapped m-b-lg">
+    <h2>
+        Статистика
+    </h2>
+</div>
+
+<div class="row">
+    <div class="col-md-4">
+        <h3>Комментарии</h3>
+        <div id="comments-chart"></div>
+    </div>
+    <div class="col-md-4">
+        <h3>Подписчики</h3>
+        <div id="subscribers-chart"></div>
+    </div>
+    <div class="col-md-4">
+        <h3>Лайки</h3>
+        <div id="likes-chart"></div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6">
+        <h3>Просмотры</h3>
+        <div id="views-chart"></div>
+    </div>
+    <div class="col-md-6">
+        <h3>Коэффициент роста</h3>
+        <div id="grow-chart"></div>
+    </div>
+</div>
+{% endif %}
+
+{% endblock %}
+
+{% block scipts %}
+<script src="js/plugins/morris/raphael-2.1.0.min.js"></script>
+<script src="js/plugins/morris/morris.js"></script>
+<script>
+{% if result.status %}
+    Morris.Area({
+        element: 'comments-chart',
+        data: [
+            {% for m in result.details.statistics %}
+                {
+                    period: '{{ m.datetime }}',
+                    comments: {{ m.comments }}
+                },
+            {% endfor %}
+        ],
+        xkey: 'period',
+        ykeys: ['comments'],
+        labels: ['Комментарии'],
+        hideHover: false,
+        resize: true,
+        lineColors: ['#87d6c6'],
+        lineWidth:2,
+        pointSize:1
+    });
+    Morris.Area({
+        element: 'subscribers-chart',
+        data: [
+            {% for m in result.details.statistics %}
+                {
+                    period: '{{ m.datetime }}',
+                    subscribers: {{ m.subscribers }}
+                },
+            {% endfor %}
+        ],
+        xkey: 'period',
+        ykeys: ['subscribers'],
+        labels: ['Подписчики'],
+        hideHover: false,
+        resize: true,
+        lineColors: ['#54cdb4'],
+        lineWidth:2,
+        pointSize:1
+    });
+    Morris.Area({
+        element: 'views-chart',
+        data: [
+            {% for m in result.details.statistics %}
+                {
+                    period: '{{ m.datetime }}',
+                    views: {{ m.views }}
+                },
+            {% endfor %}
+        ],
+        xkey: 'period',
+        ykeys: ['views'],
+        labels: ['Просмотры'],
+        hideHover: false,
+        resize: true,
+        lineColors: ['#b3c9d6'],
+        lineWidth:2,
+        pointSize:1
+    });
+    Morris.Area({
+        element: 'likes-chart',
+        data: [
+            {% for m in result.details.statistics %}
+                {
+                    period: '{{ m.datetime }}',
+                    likes: {{ m.likes }}
+                },
+            {% endfor %}
+        ],
+        xkey: 'period',
+        ykeys: ['likes'],
+        labels: ['Лайки'],
+        hideHover: false,
+        resize: true,
+        lineColors: ['#ef0c5c'],
+        lineWidth:2,
+        pointSize:1
+    });
+    Morris.Area({
+        element: 'grow-chart',
+        data: [
+            {% for m in result.details.statistics %}
+                {
+                    period: '{{ m.datetime }}',
+                    grow: {{ m.grow }}
+                },
+            {% endfor %}
+        ],
+        xkey: 'period',
+        ykeys: ['grow'],
+        labels: ['Коэффициент роста'],
+        hideHover: false,
+        resize: true,
+        lineColors: ['#cd0900'],
+        lineWidth:2,
+        pointSize:1
+    });
+{% endif %}
+
+</script>
+{% endblock %}

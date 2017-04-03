@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block page_title %}
+Коллаборация
+{% endblock %}
+
+{% block page_content %}
+    <div class="col-md-7">
+        {% include 'modules/components/channel_card.html' with channel=self_channel %}
+    </div>
+{% if result.status %}
+    <div class="clearfix"></div>
+    <div class="page-title wrapped">
+        <h2>
+            Партнёры
+        </h2>
+    </div>
+    <div>
+        {% for c in result.details %}
+            {% include 'modules/components/channel_card.html' with channel=c %}
+        {% empty %}
+            <div class="col-md-12 p-lg text-center">
+                <h2 class="font-weight-bold">
+                    Не удалось подобрать партнера по сотрудничеству с вами.
+                </h2>
+            </div>
+            <div class="clearfix"></div>
+        {% endfor %}
+    </div>
+{% endif %}
+
+{% endblock %}
+

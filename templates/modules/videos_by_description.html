@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+
+{% block page_head %}
+    <link href="css/plugins/tagsinput/bootstrap-tagsinput.css" rel="stylesheet">
+    <style>
+    .input-group .bootstrap-tagsinput {
+        border-top-right-radius: 0;
+        border-bottom-right-radius: 0;
+        width: 100%
+    }
+    .input-group .input-group-btn .btn {
+        height: 150%;
+    }
+    </style>
+{% endblock %}
+
+{% block page_title %}
+    Отслеживание чужой рекламы
+{% endblock %}
+
+{% block page_content %}
+<form method="post" class="form-horizontal">
+    <div class="col-md-5">
+        <p class="font-bold">
+            Введите ключевые слова
+        </p>
+        <p>
+            Для поиска необходимо ввести набор ключевых слов, с помошью которых будет осуществлён поиск видео
+        </p>
+        <div id="resize_wrapper">
+            <div class="input-group">
+                <input name='tags' type="text" data-role="tagsinput" value="Реклама" />
+                <span class="input-group-btn">
+                    <button id="submit_form" class="btn btn-primary" type="button">
+                        Поиск
+                    </button>
+                </span>
+            </div>
+        </div>
+    </div>
+    <div class="clearfix"></div>
+</form>
+
+{% if result.status %}
+    <div class="page-title wrapped m-b-lg">
+        <h2>
+            Результаты
+        </h2>
+    </div>
+    <div>
+    {% include 'modules/components/videos_grid.html' %}
+    </div>
+{% endif %}
+{% endblock %}
+
+{% block scipts %}
+    <script src="js/plugins/tagsinput/bootstrap-tagsinput.js"></script>
+    <script>
+    document.getElementById('submit_form').onclick = function () {
+        $('form').submit();
+    };
+    </script>
+{% endblock %}
