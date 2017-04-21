@@ -74,12 +74,6 @@
         <div class="sidebar-collapse">
             <ul class="nav" id="side-menu">
                 <li>
-                    <a href="/index">
-                        <i class="fa fa-th-large"></i>
-                        <span class="nav-label">Главная</span>
-                    </a>
-                </li>
-                <li>
                     <a href="/module?feature=smart_search">
                         <i class="fa fa-search" aria-hidden="true"></i>
                         <span class="nav-label">Умный поиск</span>
@@ -94,23 +88,22 @@
                         </a>
                     </li>
                 {% endfor %}
+                <hr>
                 {% for item_name, permission, subitems in menu_items %}
-                    <li>
+{% if permission %}                   
+ <li>
                         <a>
                             <i class="fa {% if permission %}fa-unlock{% else %}fa-lock{% endif %}"></i>
                             <span class="nav-label">{{ item_name }}</span>
-                            <span class="fa arrow"></span>
-                        </a>
-                        <ul class="nav nav-second-level">
+                        </a> </li>
                             {% for su_title, href in subitems %}
                                 <li {% if not permission %}class="disabled"{% endif %}>
                                     <a {% if permission %}href={{ href }}{% endif %}>
-                                        {{ su_title }}
+                                        <span class="nav-label">{{ su_title }}</span>
                                     </a>
                                 </li>
                             {% endfor %}
-                        </ul>
-                    </li>
+{%endif %}
                 {% endfor %}
             </ul>
 

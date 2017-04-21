@@ -6,9 +6,9 @@ from re import compile
 class YtPlatformQuery(object):
     def __init__(self, mongo_db):
         self._mongo_db = mongo_db
-        self._videos_collection = mongo_db.get_collection('yt_videos')
-        self._channels_collection = mongo_db.get_collection('yt_channels')
-        self._playlists_collection = mongo_db.get_collection('yt_playlists')
+        self._videos_collection = mongo_db.get_collection('yt_local_videos')
+        self._channels_collection = mongo_db.get_collection('yt_local_channels')
+        self._playlists_collection = mongo_db.get_collection('yt_local_playlists')
         self._likes_collection = mongo_db.get_collection('yt_likes')
         self._subscriptions_collection = mongo_db.get_collection('yt_subscriptions')
         self._statistic_collection = mongo_db.get_collection('yt_statistic')

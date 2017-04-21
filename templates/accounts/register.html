@@ -9,7 +9,7 @@
 
 {% for field in form %}
     <div class="form-group">
-        <input class="form-control" type="{{ field|field_type }}" placeholder="{{ field.label }}" name="{{ field.name }}" {% if field.value %}value="{{ field.value }}"{% endif %}>
+        <input class="form-control" type="{% if field.name == 'password1' or field.name == 'password2'%}password{% else %}  {{ field|field_type }} {%endif%}" placeholder="{{ field.label }}" name="{{ field.name }}" {% if field.value %}value="{{ field.value }}"{% endif %}>
         {% if field.errors %}
             <div class="alert alert-danger m-t">
                 {{ field.errors.as_text }}

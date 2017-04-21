@@ -11,7 +11,7 @@ from .top3_video import top3_video
 from .user_channels import users_channels
 from .video_commentators import video_commentators
 from .videos_by_description import videos_by_description
-
+from .auditory_analyze import auditory_analyze
 
 FEATURE_HANDLERS = {
     'users_channels': users_channels,
@@ -27,7 +27,7 @@ FEATURES = {
     'top3_among_users': (ServicePermission.standart, top3_among_users),
     'top3_video': (ServicePermission.standart, top3_video),
     'collaboration': (ServicePermission.standart, collaboration),
-    'auditory_analyze': ServicePermission.standart,
+    'auditory_analyze': (ServicePermission.standart, auditory_analyze),
     'popular_tags': (ServicePermission.standart, popular_tags),
 
     'channel_subscribers': (ServicePermission.premium, channel_subscribers),

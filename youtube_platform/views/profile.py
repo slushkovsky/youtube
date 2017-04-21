@@ -1,5 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
+from django.views.decorators.csrf import csrf_exempt  
 
 from ..models import FeatureUsage
 from ..yt_api import query_maker
@@ -7,6 +8,7 @@ from .menu import create_context_from_request
 
 
 @login_required
+@csrf_exempt
 def profile(request):
     context = create_context_from_request(request)
     context['disable_page_bg'] = True

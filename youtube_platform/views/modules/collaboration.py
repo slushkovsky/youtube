@@ -10,9 +10,9 @@ def collaboration(request, context):
     )
     if self_channel is None:
         context['result']['status'] = False
-        context['errors'] += 'Не удаётся получить информацию о ' \
-                             'вашем канале. Пожалуйста, повторите ' \
-                             'попытку позже.'
+        context['result']['errors'].append('Не удаётся получить информацию о ' \
+                            'вашем канале. Пожалуйста, повторите ' \
+                            'попытку позже.')
     else:
         context['self_channel'] = self_channel
         if self_channel_id is None or len(self_channel_id) == 0:

@@ -20,3 +20,4 @@ django-widget-tweaks
 py-moneyed 
 django-money
 python-memcached
+django-admin-tools-stats

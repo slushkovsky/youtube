@@ -9,6 +9,7 @@ from django.contrib.auth.views import (
 )
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
+from django.views.decorators.csrf import csrf_exempt
 
 from youtube_platform.service_permission import ServicePermission
 from ..models import Profile
@@ -41,7 +42,7 @@ class MyRegistrationForm(UserCreationForm):
 
         return user
 
-
+@csrf_exempt
 def login(request):
     return auth_login(
         request, 'accounts/login.html', redirect_field_name='success_redirect'

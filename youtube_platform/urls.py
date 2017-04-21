@@ -28,11 +28,11 @@ from .views.modules.count_roi import process_roi
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^([\w\/\-.]+).(js|css|scss|jpg|png|wof|ttf)[?\w\d]*', serve),
-    url(r'^$', handle_index),
+    url(r'^/?$', handle_index),
     url(r'^index', handle_index),
     url(r'^plain', handle_plains),
     url(r'^module', entry_point),
-    url(r'^accounts/login$', login),
+    url(r'^accounts/login.*$', login),
     url(r'^accounts/logout$', logout),
     url(r'^accounts/registration$', register),
     url(r'^accounts/profile$', profile),

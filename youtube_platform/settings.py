@@ -25,7 +25,7 @@ SECRET_KEY = 'lg1g87^#*n(ovgukclhr@t2qrqf#axudwo!(h^s$w68-w4-g#*'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['62.109.6.17', '192.168.1.107', 'localhost']
+ALLOWED_HOSTS = ['88.212.253.235', 'adytools.ru', 'adytools.com', 'localhost']
 
 
 # Application definition

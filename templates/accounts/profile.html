@@ -33,7 +33,7 @@
     </style>
 
     <div class="row m-b-lg m-t-lg">
-        <div class="col-md-3 profile-image text-center">
+        <div class="col-md-4 profile-image text-center">
             <img
                     src="{{ yt_profile.channelInfo.thumbnails.medium.url }}"
                     class="img-circle circle-border m-b-md"
@@ -50,11 +50,11 @@
                            style="color: inherit;">
                             <i class="fa fa-youtube-play"
                                aria-hidden="true"></i>
-                            Ссылка на канал
+                            Подтверить канал 
                         </a>
                     </h3>
                     <h3 class="m-t-b-xs-i p-xxs bg-info b-rad">
-                        <a href="{{ user.email }}" style="color: inherit;">
+                        <a href="{{ user.email }}" style="color: inherit; max-width: 100%;">
                             <i class="fa fa-envelope" aria-hidden="true"></i>
                             {{ user.email }}
                         </a>
@@ -79,7 +79,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-5">
+        <div class="col-md-4">
             <div class="ibox">
                 <div class="ibox-content">
                     <h2>Статистика канала</h2>
