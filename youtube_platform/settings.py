@@ -25,7 +25,7 @@ SECRET_KEY = 'lg1g87^#*n(ovgukclhr@t2qrqf#axudwo!(h^s$w68-w4-g#*'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['88.212.253.235', 'adytools.ru', 'adytools.com', 'localhost']
+ALLOWED_HOSTS = ['127.0.0.1', '88.212.253.235', 'adytools.ru', 'adytools.com', 'localhost']
 
 
 # Application definition
@@ -60,8 +60,7 @@ ROOT_URLCONF = 'youtube_platform.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates')]
-        ,
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -157,7 +156,7 @@ CURRENCIES = ('USD', 'RUB')
 
 # Logout URL, maybe it should point on lending page?
 LOGOUT_REDIRECT_URL = '/accounts/login'
-
+LOGIN_URL = '/accounts/login'
 
 # Email settings
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'

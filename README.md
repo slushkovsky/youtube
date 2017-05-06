@@ -1,3 +1,22 @@
+# Easy run (Ubuntu 16.04) 
+
+## Install 
+Run in termimal (use Ctrl+X+E for usefull multiline input):
+```
+git clone https://github.com/slushkovsky/youtube.git
+cd youtube
+sudo add-apt-repository ppa:jonathonf/python-3.6 && sudo apt-get update && sudo apt-get install python 3.6
+sudo pip3 install virtualenv
+virtualenv .venv -p python3.6
+.venv/bin/pip3 install -r requirements.txt
+.venv/bin/python3 manage.py migrate
+```
+
+## Run
+Excecute in terminal inside project folder:  
+`.venv/bin/python3 manage.py runserver`  
+Site will be available on http://127.0.0.1:8000 or http://localhost:8000  
+
 # Deployment
 
 Scheme: Nginx <-> uwsgi <-> Django (python 3.6)

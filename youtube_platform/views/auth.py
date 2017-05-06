@@ -20,7 +20,7 @@ class MyRegistrationForm(UserCreationForm):
     first_name = forms.CharField(required=False)
     last_name = forms.CharField(required=False)
 
-    youtube_channel_url = forms.URLField(strip=True)
+    youtube_channel_url = forms.URLField()
 
     class Meta:
         model = User
