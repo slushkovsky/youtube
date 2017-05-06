@@ -1,0 +1,266 @@
+{% extends 'base.html' %}
+
+{% block page_head %}
+<link href="css/plugins/iCheck/custom.css" rel="stylesheet">
+
+<style>
+    .s-row {
+        background-color: transparent;
+    }
+
+    .show-hide-filters {
+        color: #bbbbbb;
+        margin-top: 10px;
+        margin-bottom: 15px;
+        border-style: none;
+        background-color: transparent;
+    }
+
+    .inset-shadow {
+    }
+</style>
+{% endblock %}
+
+{% block page_title %}
+Умный поиск
+{% endblock %}
+
+{% block page_content %}
+<form class="form-horizontal" method="POST">
+<fieldset>
+
+<!-- Select Basic -->
+<div class="input-group m-b">
+    <span class="input-group-addon">
+        <i class="fa fa-key" aria-hidden="true"></i>
+    </span>
+    <input name="key_phase" type="text" placeholder="Ключевая фраза" class="form-control">
+    <span class="input-group-btn">
+        <input type="submit" class="btn btn-primary" value="Поиск">
+    </span>
+</div>
+
+<div class="row">
+    <div class="col-md-4">
+        <hr>
+    </div>
+    <button
+        type="button"
+        class="col-md-4 text-center show-hide-filters"
+        data-toggle="collapse"
+        data-target="#demo"
+        aria-expanded="true"
+    >
+        Показать/скрыть фильтры
+    </button>
+    <div class="col-md-4">
+        <hr>
+    </div>
+</div>
+
+<div class="collapse in gray-bg container-fluid row inset-shadow p-xs" id="demo">
+<div class="s-row">
+    <div class="col-md-6 p-xs">
+        <input
+            id="subscribers_more_then"
+            type="text"
+            value="0"
+            name="subscribers_more_then"
+            class="col-md-8 form-control {% if not permissions.subscribers_more_then %}
+            disabled
+            {% endif %}"
+        >
+    </div>
+    <div class="col-md-6 p-xs">
+        <input
+            id="views_count"
+            type="text"
+            value="0"
+            name="views_count"
+            class="col-md-8 form-control {% if not permissions.views_count %}
+            disabled
+            {% endif %}"
+        >
+    </div>
+</div>
+<div class="s-row">
+    <div class="col-md-6 p-xs">
+        <input
+            id="likes_rate"
+            type="text"
+            value="0"
+            name="likes_rate"
+            class="col-md-8 form-control {% if not permissions.likes_rate %}
+            disabled
+            {% endif %}"
+        >
+    </div>
+    <div class="col-md-6 p-xs">
+        <input
+            id="duration"
+            type="text"
+            value="0"
+            name="duration"
+            class="col-md-8 form-control {% if not permissions.duration %}
+            disabled
+            {% endif %}"
+        >
+    </div>
+</div>
+<div class="s-row">
+    <div class="col-md-6 p-xs">
+        <input
+            id="upload_earle_then"
+            type="text"
+            value="0"
+            name="upload_earle_then"
+            class="col-md-8 form-control {% if not permissions.upload_earle_then %}
+            disabled
+            {% endif %}"
+        >
+    </div>
+    <div class="col-md-6 p-xs">
+        <input
+            id="comments_more_then"
+            type="text"
+            value="0"
+            name="comments_more_then"
+            class="col-md-8 form-control {% if not permissions.comments_more_then %}
+            disabled
+            {% endif %}"
+        >
+    </div>
+</div>
+<div class="s-row">
+    <div class="col-md-6 p-xs">
+        <div class="i-checks">
+            <span class="">
+                <div class="icheckbox_square-green {% if not permissions.exclude_approved_channels %}disabled{% endif %}" style="position: relative;">
+                    <input
+                        name="exclude_approved_channels"
+                        id="exclude_approved_channels"
+                        type="checkbox"
+                        value=""
+                        style="position: absolute; opacity: 0;"
+                    >
+                    <ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"></ins>
+                </div>
+                <i></i>
+                Исключить подтвержденные каналы
+            </span>
+        </div>
+    </div>
+    <div class="col-md-6 p-xs">
+        <div class="i-checks">
+            <span class="">
+                <div class="icheckbox_square-green {% if not permissions.cc_license %}disabled{% endif %}" style="position: relative;">
+                    <input
+                        name="cc_license"
+                        id="cc_license"
+                        type="checkbox"
+                        value=""
+                        style="position: absolute; opacity: 0;"
+                    >
+                    <ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"></ins>
+                </div>
+                <i></i>
+                Лицензия Common Creative
+            </span>
+        </div>
+    </div>
+</div>
+</div>
+
+{% if result.status %}
+    <div class="page-title wrapped m-b-lg">
+        <h2>
+            Результаты
+        </h2>
+    </div>
+    <div>
+    {% include 'modules/components/videos_grid.html' %}
+    </div>
+{% endif %}
+
+</fieldset>
+</form>
+{% endblock %}
+
+{% block scipts %}
+<script src="js/plugins/iCheck/icheck.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $('.i-checks').iCheck({
+            checkboxClass: 'icheckbox_square-green',
+            radioClass: 'iradio_square-green'
+        });
+    });
+
+
+    $("input[name='subscribers_more_then']").TouchSpin({
+        min: 0,
+        max: 1000000,
+        stepinterval: 1,
+        maxboostedstep: 1000,
+        prefix: 'Подписчиков больше'
+    });
+    $("input[name='views_count']").TouchSpin({
+        min: 0,
+        max: 1000000,
+        stepinterval: 1,
+        maxboostedstep: 1000,
+        prefix: 'Просмотров больше'
+    });
+    $("input[name='likes_rate']").TouchSpin({
+        min: 0,
+        max: 100,
+        stepinterval: 1,
+        maxboostedstep: 5,
+        prefix: 'Лайков больше',
+        postfix: '%'
+    });
+    $("input[name='duration']").TouchSpin({
+        min: 0,
+        max: 1000000,
+        stepinterval: 1,
+        maxboostedstep: 10,
+        prefix: 'Длительность больше',
+        postfix: 'с.'
+    });
+    $("input[name='upload_earle_then']").TouchSpin({
+        min: 0,
+        max: 1000000,
+        stepinterval: 1,
+        maxboostedstep: 10000000,
+        prefix: 'Выложено раньше',
+        postfix: 'дней'
+    });
+    $("input[name='comments_more_then']").TouchSpin({
+        min: 0,
+        max: 1000000,
+        stepinterval: 1,
+        maxboostedstep: 100,
+        prefix: 'Комментариев больше'
+    });
+
+    {% if not permissions.subscribers_more_then %}
+        $("#subscribers_more_then").prop('disabled', true);
+    {% endif %}
+    {% if not permissions.views_count %}
+        $("#views_count").prop('disabled', true);
+    {% endif %}
+    {% if not permissions.likes_rate %}
+        $("#likes_rate").prop('disabled', true);
+    {% endif %}
+    {% if not permissions.duration %}
+        $("#duration").prop('disabled', true);
+    {% endif %}
+    {% if not permissions.upload_earle_then %}
+        $("#upload_earle_then").prop('disabled', true);
+    {% endif %}
+    {% if not permissions.comments_more_then %}
+        $("#comments_more_then").prop('disabled', true);
+    {% endif %}
+</script>
+{% endblock %}

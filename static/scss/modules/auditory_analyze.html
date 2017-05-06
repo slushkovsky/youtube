@@ -1,0 +1,118 @@
+{% extends 'base.html' %}
+
+{% block page_head %}
+<link href="css/plugins/morris/morris-0.4.3.min.css" rel="stylesheet">
+{% endblock %}
+
+{% block page_title %}
+Анализ аудитории
+{% endblock %}
+
+{% block page_content %}
+
+{% endblock %}
+
+{% block scipts %}
+<script src="js/plugins/morris/raphael-2.1.0.min.js"></script>
+<script src="js/plugins/morris/morris.js"></script>
+<script>
+{% if result.status %}
+    Morris.Area({
+        element: 'comments-chart',
+        data: [
+            {% for m in result.details.statistics %}
+                {
+                    period: '{{ m.datetime }}',
+                    comments: {{ m.comments }}
+                },
+            {% endfor %}
+        ],
+        xkey: 'period',
+        ykeys: ['comments'],
+        labels: ['Комментарии'],
+        hideHover: false,
+        resize: true,
+        lineColors: ['#87d6c6'],
+        lineWidth:2,
+        pointSize:1
+    });
+    Morris.Area({
+        element: 'subscribers-chart',
+        data: [
+            {% for m in result.details.statistics %}
+                {
+                    period: '{{ m.datetime }}',
+                    subscribers: {{ m.subscribers }}
+                },
+            {% endfor %}
+        ],
+        xkey: 'period',
+        ykeys: ['subscribers'],
+        labels: ['Подписчики'],
+        hideHover: false,
+        resize: true,
+        lineColors: ['#54cdb4'],
+        lineWidth:2,
+        pointSize:1
+    });
+    Morris.Area({
+        element: 'views-chart',
+        data: [
+            {% for m in result.details.statistics %}
+                {
+                    period: '{{ m.datetime }}',
+                    views: {{ m.views }}
+                },
+            {% endfor %}
+        ],
+        xkey: 'period',
+        ykeys: ['views'],
+        labels: ['Просмотры'],
+        hideHover: false,
+        resize: true,
+        lineColors: ['#b3c9d6'],
+        lineWidth:2,
+        pointSize:1
+    });
+    Morris.Area({
+        element: 'likes-chart',
+        data: [
+            {% for m in result.details.statistics %}
+                {
+                    period: '{{ m.datetime }}',
+                    likes: {{ m.likes }}
+                },
+            {% endfor %}
+        ],
+        xkey: 'period',
+        ykeys: ['likes'],
+        labels: ['Лайки'],
+        hideHover: false,
+        resize: true,
+        lineColors: ['#ef0c5c'],
+        lineWidth:2,
+        pointSize:1
+    });
+    Morris.Area({
+        element: 'grow-chart',
+        data: [
+            {% for m in result.details.statistics %}
+                {
+                    period: '{{ m.datetime }}',
+                    grow: {{ m.grow }}
+                },
+            {% endfor %}
+        ],
+        xkey: 'period',
+        ykeys: ['grow'],
+        labels: ['Коэффициент роста'],
+        hideHover: false,
+        resize: true,
+        lineColors: ['#cd0900'],
+        lineWidth:2,
+        pointSize:1
+    });
+{% endif %}
+
+</script>
+{% endblock %}

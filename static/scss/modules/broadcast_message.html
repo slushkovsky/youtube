@@ -1,0 +1,125 @@
+{% extends 'base.html' %}
+
+{% block page_head %}
+    <style>
+        .ellipsis {
+            display: block;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
+    </style>
+{% endblock %}
+
+{% block page_title %}
+    Рассылка сообщений
+{% endblock %}
+
+{% block page_content %}
+    <form method="post" class="form-horizontal m-b-lg" id="form">
+        <textarea
+            name="channels"
+            class="form-control m-b {% if form.errors.channels %}has-error{% endif %}"
+            rows="1"
+            placeholder="Список каналов"
+            required
+        ></textarea>
+        <textarea
+            name="message"
+            class="form-control m-b {% if form.errors.message %}has-error{% endif %}"
+            rows="5"
+            placeholder="Текст сообщения..."
+        ></textarea>
+        <input type="submit" class="btn btn-primary" value="Разослать">
+    </form>
+    <div class="clearfix"></div>
+    <div class="page-title wrapped">
+        <h2>
+            Прошлые рассылки
+        </h2>
+    </div>
+    <div>
+        {% for message in messages %}
+            <div class="row m-b m-t">
+                <div class="col-md-4">
+                    <div>
+                        <label>
+                            Получатели
+                        </label>
+                    </div>
+                    <div>
+                        {% for recipients in message.recipients %}
+                            <a
+                                href="{{ recipients }}"
+                                class="btn btn-default btn-rounded ellipsis m-xs"
+                            >
+                                {% if recipients.channelInfo.channelTitle %}
+                                    {{ recipients.channelInfo.channelTitle }}
+                                {% else %}
+                                    {{ recipients }}
+                                {% endif %}
+                            </a>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div>
+                        <label>
+                            Текст сообщения
+                        </label>
+                    </div>
+                    <div>
+                        {{ message.message }}
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div>
+                        <label>
+                            Время отправки
+                        </label>
+                    </div>
+                    <div>
+                        {{ message.datetime }}
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div>
+                        <label>
+                             Статус
+                        </label>
+                    </div>
+                    <div>
+                        {% if message.status == 'pending' %}
+                        <label class="badge badge-info">Отправка</label>
+                        {% elif message.status == 'success' %}
+                        <label class="badge badge-success">Отправлено</label>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            <hr class="row">
+        {% empty %}
+            <div class="col-md-12 p-lg text-center">
+                <h2 class="font-weight-bold">
+                    Пусто.
+                </h2>
+            </div>
+            <div class="clearfix"></div>
+        {% endfor %}
+        <div class="clearfix"></div>
+    </div>
+{% endblock %}
+
+{% block scipts %}
+    <script src="js/plugins/autosize/autosize.js"></script>
+    <script>
+    $(function () {
+        autosize($('textarea'));
+        $('#form').keydown(function (e) {
+            if (e.ctrlKey && e.keyCode == 13) {
+                $('#form').submit();
+            }
+        });
+    });
+    </script>
+{% endblock %}

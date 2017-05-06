@@ -1,0 +1,63 @@
+// COLORS
+$main-orange: rgb(250, 84, 50);
+$main-grey: rgb(53, 54, 54);
+$main-menu-font-color: rgb(254, 254, 254);
+$landing-online-course-font: rgb(253, 253, 253);
+$landing-block-heading-color: rgb(0, 182, 199);
+$landing-block-grey-text: rgba(61, 70, 80, 0.671);
+$bread-pieces-color: rgba(53, 54, 54, 0.69);
+
+$page-header-black: rgb(0,0,0);
+
+// FONTS
+@font-face {
+  font-family: "MyriadPro";
+  src: url("../fonts/MyriadPro/MyriadProRegular/MyriadProRegular.eot");
+  src: url("../fonts/MyriadPro/MyriadProRegular/MyriadProRegular.eot?#iefix")format("embedded-opentype"),
+  url("../fonts/MyriadPro/MyriadProRegular/MyriadProRegular.woff") format("woff"),
+  url("../fonts/MyriadPro/MyriadProRegular/MyriadProRegular.ttf") format("truetype");
+  font-style: normal;
+  font-weight: normal;
+}
+
+@font-face {
+  font-family: "MyriadProBold";
+  src: url("../fonts/MyriadPro/MyriadProBold/MyriadProBold.ttf") format("truetype");
+  font-style: normal;
+  font-weight: normal;
+}
+
+// Proxima Nova
+
+@font-face {
+  font-family: "ProximaNova";
+  src: url("../fonts/Proxima Nova/Proxima Nova Regular.otf") format("opentype");
+}
+@font-face {
+  font-family: "ProximaNovaLight";
+  src: url("../fonts/Proxima Nova/Proxima Nova Light.otf") format("opentype");
+}
+@font-face {
+  font-family: "ProximaNovaBold";
+  src: url("../fonts/Proxima Nova/Proxima Nova Bold.otf") format("opentype");
+}
+@font-face {
+  font-family: "ProximaNovaRegularItalic";
+  src: url("../fonts/Proxima Nova/Proxima Nova Regular Italic.otf") format("opentype");
+}
+@font-face {
+  font-family: "ProximaNovaLightItalic";
+  src: url("../fonts/Proxima Nova/Proxima Nova Light Italic.otf") format("opentype");
+}
+@font-face {
+  font-family: "ProximaNovaBoldItalic";
+  src: url("../fonts/Proxima Nova/Proxima Nova Bold Italic.otf") format("opentype");
+}
+
+// CenturyGothic
+@font-face {
+  font-family: "CenturyGothic";
+  src: url("../fonts/Century Gothic/Century Gothic.ttf");
+  font-style: normal;
+  font-weight: normal;
+}

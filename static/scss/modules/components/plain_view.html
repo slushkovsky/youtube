@@ -1,0 +1,28 @@
+<div class="ibox {% if plain.disabled %}look-disabled{% endif %}">
+    <div class="ibox-content product-box">
+        <div class="product-imitation">
+            <i class="fa {{ plain.icon }}" aria-hidden="true"></i>
+        </div>
+        <div class="product-desc">
+            <span class="product-price">
+                {{ plain.price }}
+            </span>
+            <a href="#" class="product-name">{{ plain.title }}</a>
+            <ul class="small m-t-xs">
+                {% for d in plain.description  %}
+                    <li>
+                        {{ d }}
+                    </li>
+                {% endfor %}
+            </ul>
+            <div class="m-t text-righ">
+                <a
+                    href="plain?plain={{ plain.codename }}"
+                    class="btn btn-xs btn-outline btn-primary {% if plain.disabled %}disabled{% endif %}"
+                >
+                    Купить<i class="fa fa-long-arrow-right"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

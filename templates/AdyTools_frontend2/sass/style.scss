@@ -1,0 +1,43 @@
+@import "layout/header";
+@import "layout/footer";
+//@import "helpers/variables";
+//@import 'helpers/prestyled';
+//@import 'helpers/mixins';
+@import 'fonts/fonts';
+@import 'pages/landing';
+
+html {
+	font-size: 16px;
+}
+html, body {
+	height: 100%;
+}
+
+a:focus {
+	outline: none;
+}
+
+[aria-hidden="true"] { display: none; }
+[aria-hidden="false"] { display: block; }
+
+.clearfix:after{
+  content:'';
+  clear:both;
+  display:table;
+}
+.no-margin-list {
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+}
+
+.row-centered {
+	text-align:center;
+	overflow: hidden;
+}
+.col-centered {
+	display:inline-block;
+	float:none;
+  text-align:left;
+  margin-right:-4px;
+}

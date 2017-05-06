@@ -17,9 +17,14 @@ permissions = dict(
 )
 
 smart_search_validator = dict(
-    key_phase=str, subscribers_more_then=int, views_count=int,
-    likes_rate=float, duration=int, comments_more_then=int,
-    upload_earle_then=float, exclude_approved_channels=bool,
+    key_phase=str, 
+    views_policy=str, views_value=int,
+    subscribers_policy=str, subscribers_value=int,
+    comments_policy=str, comments_value=int, 
+    likes_policy=str, likes_value=int,
+	duration_policy=str, duration_value=int,
+    published_in_policy=str, published_in_value=int,
+    exclude_approved_channels=bool,
     cc_license=bool
 )
 
@@ -32,10 +37,10 @@ def validate_post_request(user, data):
             errors += [f'Unexpected key {key}']
             continue
 
-        if key != 'key_phase':
-            if not user.profile.has_perm(permissions[key]):
-                errors += [f'Have no access to this filter {key}']
-                continue
+#        if key != 'key_phase':
+#            if not user.profile.has_perm(permissions[key]):
+#                errors += [f'Have no access to this filter {key}']
+#                continue
         if value != '0':
             validator = smart_search_validator[key]
             try:
@@ -59,6 +64,8 @@ def smart_search(request, context):
         videos = query_maker.query_smart_search(
             **validated
         )
+     
+        videos=[1, 2, 3]
 
         context['result']['errors'] = errors
         context['result']['status'] = True

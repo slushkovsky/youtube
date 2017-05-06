@@ -28,6 +28,7 @@ def users_channels(request, context):
             social_links = [
                 l.decode().strip() for l in file.readlines()
             ]
+
             channels = query_maker.query_users_channels(social, social_links)
             getattr(request, 'add_to_params')['links'] = social_links
 

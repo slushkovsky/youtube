@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block page_head %}
+<link href="css/plugins/jasny/jasny-bootstrap.min.css" rel="stylesheet">
+{% endblock %}
+
+{% block page_title %}
+ТОП3 Видео среди пользователей
+{% endblock %}
+
+{% block page_content %}
+
+{% if result.status %}
+    <div>
+    {% include 'modules/components/videos_grid.html' %}
+    </div>
+{% endif %}
+
+{% endblock %}
+
+
+{% block scipts %}
+<script src="js/plugins/jasny/jasny-bootstrap.min.js"></script>
+{% endblock %}

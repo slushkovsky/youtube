@@ -12,6 +12,7 @@ MENU_ITEMS = [
     ]),
 
     ('Стандарт', ServicePermission.standart, [
+        ('Получение лайков', 'video_likes'),
         ('ТОП3 видео среди пользователей', 'top3_among_users'),
         ('ТОП3 видео', 'top3_video'),
         ('Коллаборация', 'collaboration'),

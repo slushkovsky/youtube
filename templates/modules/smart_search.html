@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block page_head %}
-<link href="css/plugins/iCheck/custom.css" rel="stylesheet">
+<link href="/static/css/plugins/iCheck/custom.css" rel="stylesheet">
 
 <style>
     .s-row {
@@ -26,150 +26,108 @@
 {% endblock %}
 
 {% block page_content %}
-<form class="form-horizontal" method="POST">
-<fieldset>
+<form method="POST">
+	<div class="input-group m-b">
+		<span class="input-group-addon"><i class="fa fa-key" aria-hidden="true"></i></span>
+		<input name="key_phase" type="text" placeholder="Ключевая фраза" class="form-control">
+	</div>  
+ 
+    <div class="form-group row"> 
+		<label for="subscribers_policy" class="col-sm-2 col-form-label">Подписчики</label>
+        <select id="subscribers_policy" name="subscribers_policy" class="form-control" style="width: 30% !important; display: inline-block;">
+			<option value="more">больше</option>
+			<option value="less">меньше</option>
+		</select> 
+		<input class="form-control" name="subscribers_value" value="0" type="number" style="width: 30% !important; display: inline-block;"> 
+    </div> 
+    
+    <div class="form-group row"> 
+		<label for="views_policy" class="col-sm-2 col-form-label">Просмотры</label>
+        <select id="views_policy" name="views_policy" class="form-control" style="width: 30% !important; display: inline-block;">
+			<option value="more">больше</option>
+			<option value="less">меньше</option>
+		</select> 
+		<input class="form-control" name="views_value" value="0" type="number" style="width: 30% !important; display: inline-block;"> 
+    </div> 
+ 
+    <div class="form-group row"> 
+		<label for="likes_policy" class="col-sm-2 col-form-label">Лайки (от общего числа голосов)</label>
+        <select id="likes_policy" name="likes_policy" class="form-control" style="width: 30% !important; display: inline-block;">
+			<option value="more">больше</option>
+			<option value="less">меньше</option>
+		</select> 
+		<input class="form-control" name="likes_value" value="0" type="number" style="width: 30% !important; display: inline-block;"> 
+    </div> 
 
-<!-- Select Basic -->
-<div class="input-group m-b">
-    <span class="input-group-addon">
-        <i class="fa fa-key" aria-hidden="true"></i>
-    </span>
-    <input name="key_phase" type="text" placeholder="Ключевая фраза" class="form-control">
-    <span class="input-group-btn">
-        <input type="submit" class="btn btn-primary" value="Поиск">
-    </span>
-</div>
+    <div class="form-group row"> 
+		<label for="duration_policy" class="col-sm-2 col-form-label">Длительность (минут)</label>
+        <select id="duration_policy" name="duration_policy" class="form-control" style="width: 30% !important; display: inline-block;">
+			<option value="more">больше</option>
+			<option value="less">меньше</option>
+		</select> 
+		<input class="form-control" name="duration_value" value="0" type="number" style="width: 30% !important; display: inline-block;"> 
+    </div> 
 
-<div class="row">
-    <div class="col-md-4">
-        <hr>
-    </div>
-    <button
-        type="button"
-        class="col-md-4 text-center show-hide-filters"
-        data-toggle="collapse"
-        data-target="#demo"
-        aria-expanded="true"
-    >
-        Показать/скрыть фильтры
-    </button>
-    <div class="col-md-4">
-        <hr>
-    </div>
-</div>
+    <div class="form-group row"> 
+		<label for="comments_policy" class="col-form-label col-sm-2">Кол-во комментариев</label>
+        <select id="comments_policy" name="comments_policy" class="form-control" style="width: 30% !important; display: inline-block;">
+			<option value="more">больше</option>
+			<option value="less">меньше</option>
+		</select> 
+		<input class="form-control" name="comments_value" value="0" type="number" style="width: 30% !important; display: inline-block;"> 
+    </div> 
 
-<div class="collapse in gray-bg container-fluid row inset-shadow p-xs" id="demo">
-<div class="s-row">
-    <div class="col-md-6 p-xs">
-        <input
-            id="subscribers_more_then"
-            type="text"
-            value="0"
-            name="subscribers_more_then"
-            class="col-md-8 form-control {% if not permissions.subscribers_more_then %}
-            disabled
-            {% endif %}"
-        >
-    </div>
-    <div class="col-md-6 p-xs">
-        <input
-            id="views_count"
-            type="text"
-            value="0"
-            name="views_count"
-            class="col-md-8 form-control {% if not permissions.views_count %}
-            disabled
-            {% endif %}"
-        >
-    </div>
-</div>
-<div class="s-row">
-    <div class="col-md-6 p-xs">
-        <input
-            id="likes_rate"
-            type="text"
-            value="0"
-            name="likes_rate"
-            class="col-md-8 form-control {% if not permissions.likes_rate %}
-            disabled
-            {% endif %}"
-        >
-    </div>
-    <div class="col-md-6 p-xs">
-        <input
-            id="duration"
-            type="text"
-            value="0"
-            name="duration"
-            class="col-md-8 form-control {% if not permissions.duration %}
-            disabled
-            {% endif %}"
-        >
-    </div>
-</div>
-<div class="s-row">
-    <div class="col-md-6 p-xs">
-        <input
-            id="upload_earle_then"
-            type="text"
-            value="0"
-            name="upload_earle_then"
-            class="col-md-8 form-control {% if not permissions.upload_earle_then %}
-            disabled
-            {% endif %}"
-        >
-    </div>
-    <div class="col-md-6 p-xs">
-        <input
-            id="comments_more_then"
-            type="text"
-            value="0"
-            name="comments_more_then"
-            class="col-md-8 form-control {% if not permissions.comments_more_then %}
-            disabled
-            {% endif %}"
-        >
-    </div>
-</div>
-<div class="s-row">
-    <div class="col-md-6 p-xs">
-        <div class="i-checks">
-            <span class="">
-                <div class="icheckbox_square-green {% if not permissions.exclude_approved_channels %}disabled{% endif %}" style="position: relative;">
-                    <input
-                        name="exclude_approved_channels"
-                        id="exclude_approved_channels"
-                        type="checkbox"
-                        value=""
-                        style="position: absolute; opacity: 0;"
-                    >
-                    <ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"></ins>
-                </div>
-                <i></i>
-                Исключить подтвержденные каналы
-            </span>
-        </div>
-    </div>
-    <div class="col-md-6 p-xs">
-        <div class="i-checks">
-            <span class="">
-                <div class="icheckbox_square-green {% if not permissions.cc_license %}disabled{% endif %}" style="position: relative;">
-                    <input
-                        name="cc_license"
-                        id="cc_license"
-                        type="checkbox"
-                        value=""
-                        style="position: absolute; opacity: 0;"
-                    >
-                    <ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"></ins>
-                </div>
-                <i></i>
-                Лицензия Common Creative
-            </span>
-        </div>
-    </div>
-</div>
-</div>
+    <div class="form-group row"> 
+		<label for="published_in_policy" class="col-form-label col-sm-2">Давность публикации (дней)</label>
+        <select id="published_in_policy" name="published_in_policy" class="form-control" style="width: 30% !important; display: inline-block;">
+			<option value="more">больше</option>
+			<option value="less">меньше</option>
+		</select> 
+		<input class="form-control" name="published_in_value" value="0" type="number" style="width: 30% !important; display: inline-block;"> 
+    </div> 
+
+
+	<div class="s-row">
+		<div class="col-md-6 p-xs">
+			<div class="i-checks">
+				<span class="">
+					<div class="icheckbox_square-green {% if not permissions.exclude_approved_channels %}disabled{% endif %}" style="position: relative;">
+						<input
+							name="exclude_approved_channels"
+							id="exclude_approved_channels"
+							type="checkbox"
+							value=""
+							style="position: absolute; opacity: 0;"
+						>
+						<ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"></ins>
+					</div>
+					<i></i>
+					Исключить подтвержденные каналы
+				</span>
+			</div>
+		</div>
+		<div class="col-md-6 p-xs">
+			<div class="i-checks">
+				<span class="">
+					<div class="icheckbox_square-green {% if not permissions.cc_license %}disabled{% endif %}" style="position: relative;">
+						<input
+							name="cc_license"
+							id="cc_license"
+							type="checkbox"
+							value=""
+							style="position: absolute; opacity: 0;"
+						>
+						<ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"></ins>
+					</div>
+					<i></i>
+					Лицензия Common Creative
+				</span>
+			</div>
+		</div>
+
+		<input type="submit" class="btn btn-primary" value="Поиск">
+	</div>
+</form>
 
 {% if result.status %}
     <div class="page-title wrapped m-b-lg">
@@ -181,67 +139,22 @@
     {% include 'modules/components/videos_grid.html' %}
     </div>
 {% endif %}
-
-</fieldset>
-</form>
 {% endblock %}
 
 {% block scipts %}
-<script src="js/plugins/iCheck/icheck.min.js"></script>
+<script
+  src="https://code.jquery.com/jquery-3.2.1.min.js"
+  integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+  crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+<script src="/static/js/plugins/iCheck/icheck.min.js"></script>
 
 <script>
-    $(document).ready(function () {
+    $(function () {
         $('.i-checks').iCheck({
             checkboxClass: 'icheckbox_square-green',
             radioClass: 'iradio_square-green'
         });
-    });
-
-
-    $("input[name='subscribers_more_then']").TouchSpin({
-        min: 0,
-        max: 1000000,
-        stepinterval: 1,
-        maxboostedstep: 1000,
-        prefix: 'Подписчиков больше'
-    });
-    $("input[name='views_count']").TouchSpin({
-        min: 0,
-        max: 1000000,
-        stepinterval: 1,
-        maxboostedstep: 1000,
-        prefix: 'Просмотров больше'
-    });
-    $("input[name='likes_rate']").TouchSpin({
-        min: 0,
-        max: 100,
-        stepinterval: 1,
-        maxboostedstep: 5,
-        prefix: 'Лайков больше',
-        postfix: '%'
-    });
-    $("input[name='duration']").TouchSpin({
-        min: 0,
-        max: 1000000,
-        stepinterval: 1,
-        maxboostedstep: 10,
-        prefix: 'Длительность больше',
-        postfix: 'с.'
-    });
-    $("input[name='upload_earle_then']").TouchSpin({
-        min: 0,
-        max: 1000000,
-        stepinterval: 1,
-        maxboostedstep: 10000000,
-        prefix: 'Выложено раньше',
-        postfix: 'дней'
-    });
-    $("input[name='comments_more_then']").TouchSpin({
-        min: 0,
-        max: 1000000,
-        stepinterval: 1,
-        maxboostedstep: 100,
-        prefix: 'Комментариев больше'
     });
 
     {% if not permissions.subscribers_more_then %}

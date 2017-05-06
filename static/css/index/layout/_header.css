@@ -1,0 +1,42 @@
+@font-face {
+  font-family: "MyriadPro";
+  src: url("../fonts/MyriadPro/MyriadProRegular/MyriadProRegular.eot");
+  src: url("../fonts/MyriadPro/MyriadProRegular/MyriadProRegular.eot?#iefix") format("embedded-opentype"), url("../fonts/MyriadPro/MyriadProRegular/MyriadProRegular.woff") format("woff"), url("../fonts/MyriadPro/MyriadProRegular/MyriadProRegular.ttf") format("truetype");
+  font-style: normal;
+  font-weight: normal; }
+
+@font-face {
+  font-family: "MyriadProBold";
+  src: url("../fonts/MyriadPro/MyriadProBold/MyriadProBold.ttf") format("truetype");
+  font-style: normal;
+  font-weight: normal; }
+
+@font-face {
+  font-family: "ProximaNova";
+  src: url("../fonts/Proxima Nova/Proxima Nova Regular.otf") format("opentype"); }
+
+@font-face {
+  font-family: "ProximaNovaLight";
+  src: url("../fonts/Proxima Nova/Proxima Nova Light.otf") format("opentype"); }
+
+@font-face {
+  font-family: "ProximaNovaBold";
+  src: url("../fonts/Proxima Nova/Proxima Nova Bold.otf") format("opentype"); }
+
+@font-face {
+  font-family: "ProximaNovaRegularItalic";
+  src: url("../fonts/Proxima Nova/Proxima Nova Regular Italic.otf") format("opentype"); }
+
+@font-face {
+  font-family: "ProximaNovaLightItalic";
+  src: url("../fonts/Proxima Nova/Proxima Nova Light Italic.otf") format("opentype"); }
+
+@font-face {
+  font-family: "ProximaNovaBoldItalic";
+  src: url("../fonts/Proxima Nova/Proxima Nova Bold Italic.otf") format("opentype"); }
+
+@font-face {
+  font-family: "CenturyGothic";
+  src: url("../fonts/Century Gothic/Century Gothic.ttf");
+  font-style: normal;
+  font-weight: normal; }

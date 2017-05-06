@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+
+{% block page_title %}
+Комментаторы видео
+{% endblock %}
+
+{% block page_content %}
+<div class="container-fluid">
+    <form class="form-horizontal" method="post">
+        <div class="input-group m-b">
+            <span class="input-group-addon">
+                <i class="fa fa-search" aria-hidden="true"></i>
+            </span>
+            <input
+                name="video_link"
+                type="text"
+                placeholder="ID видео или его ссылка"
+                class="form-control"
+            >
+            <span class="input-group-btn">
+                <input type="submit" class="btn btn-primary" value="Получить">
+            </span>
+        </div>
+    </form>
+</div>
+
+{% if result.status %}
+{% if result.details.video %}
+    <div class="page-title wrapped m-b-lg">
+        <h2>
+            Видео
+        </h2>
+    </div>
+
+    <div class="row m-b-lg">
+        <div class="col-md-6">
+            {% include 'modules/components/video_card.html' with video=result.details.video %}
+        </div>
+    </div>
+{% endif %}
+
+{% if result.details.dbs %}
+<div class="page-title wrapped m-b-lg">
+    <h2>
+        Базы
+    </h2>
+</div>
+<div class="row m-lg">
+    {% for db in result.details.dbs %}
+        <div class="col-md-2 db-download-link {{ db.name }}">
+            <a href="{{ db.db }}">
+                <i class="fa fa-{{ db.name }}"></i>
+            </a>
+        </div>
+    {% endfor %}
+</div>
+{% endif %}
+
+{% endif %}
+
+{% endblock %}
+
+
+{% block scipts %}
+{% endblock %}

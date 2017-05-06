@@ -20,14 +20,14 @@ class YtPlatformQuery(object):
             {
                 'social_link': sl,
                 'channel':
-                    list(
+                    [res.get('channelId') for res in list(
                         self._channels_collection.find(
-                            {f'channelInfo.socials.{social_name}': sl},
-                            {'channelId': 1, 'channelUrl': 1}
+                            {f'socials.{social_name}': sl}
                         )
-                    )
+                    )]
             } for sl in social_links
         ]
+
 
     def query_most_liked_among_channels(self, channel_ids):
         likes = self._likes_collection.find(
@@ -161,38 +161,41 @@ class YtPlatformQuery(object):
         ).limit(100))
 
     def query_smart_search(
-        self, category=None, key_phase=None, subscribers_more_then=None, views_count=None,
-        likes_rate=None, duration=None, comments_more_then=None, upload_earle_then=None,
-        exclude_approved_channels=None, cc_license=None
+        self, category=None, key_phase=None, subscribers_policy=None, subscribers_value=None, views_policy=None, views_value=None, 
+        likes_policy=None, likes_value=None, duration_policy=None, duration_value=None, comments_policy=None, comments_value=None, 
+        published_in_policy=None, published_in_value=None, exclude_approved_channels=None, cc_license=None
     ):
         conditions = []
+
+        policy_to_mongo_operator = lambda policy: '$gt' if policy == 'more' else '$lt'
+
         if key_phase is not None:
             conditions.append(
                 {'title': compile(r'.*{}.*'.format(key_phase))}
             )
-        if subscribers_more_then is not None:
+        if subscribers_policy is not None and subscribers_value is not None:
             conditions.append(
-                {'channel.statistic.subscriberCount': {'$gt': subscribers_more_then}}
+                {'channel.statistic.subscriberCount': {policy_to_mongo_operator(subscribers_policy): subscribers_value}}
             )
-        if views_count is not None:
+        if views_policy is not None and views_value is not None:
             conditions.append(
-                {'viewCount': {'$gt': views_count}}
+                {'viewCount': {policy_to_mongo_operator(views_policy): views_value}}
             )
-        if likes_rate is not None:
+        if likes_policy is not None and likes_value is not None:
             conditions.append(
-                {'likeRate': {'$gt': likes_rate}}
+                {'likeRate': {policy_to_mongo_operator(likes_policy): likes_value}}
             )
-        if duration is not None:
+        if duration_policy is not None and duration_value is not None:
             conditions.append(
-                {'duration': {'$gt': duration}}
+                {'duration': {policy_to_mongo_operator(duration_policy): duration_value}}
             )
-        if comments_more_then is not None:
+        if comments_policy is not None and comments_value is not None:
             conditions.append(
-                {'commentsCount': {'$gt': comments_more_then}}
+                {'commentsCount': {policy_to_mongo_operator(comments_policy): comments_value}}
             )
-        if upload_earle_then is not None:
+        if published_in_policy is not None and published_in_value:
             conditions.append(
-                {'publishedAt': {'$lt': upload_earle_then}}
+                {'publishedAt': {policy_to_mongo_operator(published_in_policy): published_in_value}}
             )
         if exclude_approved_channels:
             conditions.append(

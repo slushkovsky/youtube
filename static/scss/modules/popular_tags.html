@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block page_title %}
+Популярные тэги
+{% endblock %}
+
+{% block page_content %}
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <td>
+                Место
+            </td>
+            <td>
+                Тэг
+            </td>
+            <td>
+                Количество упоминаний
+            </td>
+        </tr>
+    </thead>
+    <tbody>
+        {% for tag in result.details %}
+            <tr>
+                <td>
+                    {{ tag.place }}
+                </td>
+                <td>
+                    {{ tag.tag }}
+                </td>
+                <td>
+                    {{ tag.mentionCount }}
+                </td>
+            </tr>
+        {% empty %}
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

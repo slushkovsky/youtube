@@ -79,26 +79,26 @@ def get_video_statistics(youtube, video_id):
         return
         
     result['videoId'] = video_id
-    result['title'] = res['items'][0]['snippet']['title']
+    result['title'] = res['items'][0]['snippet'].get('title', '')
     result['description'] = res['items'][0]['snippet'].get('description', '')
-    result['thumbnails'] = res['items'][0]['snippet']['thumbnails']
-    result['approved'] = res['items'][0]['contentDetails']['licensedContent']
-    result['license'] = res['items'][0]['status']['license']
+    result['thumbnails'] = res['items'][0]['snippet'].get('thumbnails', '')
+    result['approved'] = res['items'][0]['contentDetails'].get('licensedContent', '')
+    result['license'] = res['items'][0]['status'].get('license', '')
     result['publishedAt'] = isodate.parse_datetime(
-        res['items'][0]['snippet']['publishedAt']
+        res['items'][0]['snippet'].get('publishedAt', '')
     ).timestamp()
-    result['tags'] = res['items'][0]['snippet'].get('tags') #Может отсутствовать (пример видео:XODqm66ooMQ)
-    result['categoryId'] = res['items'][0]['snippet']['categoryId']
-    result['likeCount'] = int(res['items'][0]['statistics'].get('likeCount', 0))
-    result['dislikeCount'] = int(res['items'][0]['statistics']['dislikeCount'])
+    result['tags'] = res['items'][0]['snippet'].get('tags', '') #Может отсутствовать (пример видео:XODqm66ooMQ)
+    result['categoryId'] = res['items'][0]['snippet'].get('categoryId', '')
+    result['likeCount'] = int(res['items'][0]['statistics'].get('likeCount', -1))
+    result['dislikeCount'] = int(res['items'][0]['statistics'].get('dislikeCount', -1))
     if float(result['likeCount']) + float(result['dislikeCount']) != 0:
         result['likeRate'] = float(result['likeCount']) / (
             float(result['likeCount']) + float(result['dislikeCount'])
         )
     else:
         result['likeRate'] = 0
-    result['viewCount'] = int(res['items'][0]['statistics']['viewCount'])
-    result['duration'] = isodate.parse_duration(res['items'][0]['contentDetails']['duration']).seconds
+    result['viewCount'] = int(res['items'][0]['statistics'].get('viewCount', -1))
+    result['duration'] = isodate.parse_duration(res['items'][0]['contentDetails'].get('duration', '2010-08-18 08:15:30Z')).seconds
     result['videoUrl'] = 'https://www.youtube.com/watch?v=' + video_id
     return result
     

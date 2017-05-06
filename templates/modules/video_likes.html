@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+
+{% block page_head %}
+<link href="css/plugins/jasny/jasny-bootstrap.min.css" rel="stylesheet">
+{% endblock %}
+
+{% block page_title %}
+Получение лайков
+{% endblock %}
+
+{% block page_content %}
+
+<div class="container-fluid">
+    <form
+        class="form-horizontal"
+        method="post"
+        action="module?feature=video_likes"
+        enctype="multipart/form-data"
+    >
+        <div class="col-md-4">
+            <label class="control-label">Cсылка на канал</label>
+            <input type="text" name="video_url" class="form-control">
+            {{ form.errors.video_url }}
+        </div>
+
+        <div class="col-md-4">
+            <label class="control-label" style="color: transparent">
+                .
+            </label>
+            <div>
+                <input
+                    type="submit" value="Получить лайки" class="btn btn-primary"
+                >
+            </div>
+        </div>
+    </form>
+</div>
+
+{% if result.status %}
+    <div class="page-title wrapped">
+        <h2>
+            Результаты
+        </h2>
+    </div>
+        <p>{{ result.details }} лайков</p>  
+
+     
+{% endif %}
+
+{% endblock %}
+
+
+{% block scipts %}
+<script src="js/plugins/jasny/jasny-bootstrap.min.js"></script>
+{% endblock %}

@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block page_head %}
-<link href="css/plugins/jasny/jasny-bootstrap.min.css" rel="stylesheet">
+<link href="/static/css/plugins/jasny/jasny-bootstrap.min.css" rel="stylesheet">
 {% endblock %}
 
 {% block page_title %}
@@ -83,8 +83,8 @@
         </td>
         <td>
             {% for channel in c.channel %}
-                <a href="{{ channel.channelUrl }}">
-                    {{ channel.channelUrl }}
+                <a href="https://www.youtube.com/channel/{{ channel }}">
+                    {{ channel }}
                 </a>
             {% endfor %}
         </td>

@@ -1,0 +1,98 @@
+{% extends 'base.html' %}
+
+{% load widget_tweaks %}
+
+{% block page_title %}
+    Подсчёт ROI
+{% endblock %}
+
+{% block page_content %}
+<form class="m-t" role="form" method="post">
+    {% csrf_token %}
+    <div class="row">
+        <div class="form-group col-md-4">
+            {{ form.label|attr:"placeholder:Введите называние ссылки"|add_class:"form-control" }}
+        </div>
+        <div class="form-group col-md-8">
+            {{ form.link|attr:"placeholder:Введите ссылку"|add_class:"form-control" }}
+
+            {% if form.errors %}
+                <div class="alert alert-danger m-t">
+                    {{ form.errors.as_text|slice:"13:" }}
+                </div>
+            {% endif %}
+        </div>
+    </div>
+    <button type="submit" class="btn btn-primary block full-width m-b">
+        Отправить
+    </button>
+</form>
+
+<div class="page-title wrapped m-b-lg">
+    <h2>
+        Статистика переходов
+    </h2>
+</div>
+
+<div class="row m-b-lg">
+    <div class="col-md-6">
+        <table class="table">
+            <thead>
+                <tr>
+                    <td>
+                        <strong>Называние</strong>
+                    </td>
+                    <td>
+                        <strong>Ссылка</strong>
+                    </td>
+                    <td>
+                        <strong>Количество визитов</strong>
+                    </td>
+                </tr>
+            </thead>
+            <tbody>
+                {% for s in roi_statistic %}
+                    <tr>
+                        <td>
+                            {{ s.label }}
+                        </td>
+                        <td>
+                            <a href="http{% if request.is_secure %}s{% endif %}://{{ request.get_host }}/roi?id={{ s.uuid }}"
+                            >{{ s.uuid }}</a>
+                        </td>
+                        <td>
+                            {{ s.visits }}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <div class="col-md-6">
+        <div id="roi-visits-chart">
+
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scipts %}
+<script src="js/plugins/morris/raphael-2.1.0.min.js"></script>
+<script src="js/plugins/morris/morris.js"></script>
+<script>
+    Morris.Donut({
+        element: 'roi-visits-chart',
+        data: [
+            {% for s in roi_statistic %}
+                { label: '{{ s.label }}', value: {{ s.visits }} },
+            {% endfor %}
+        ],
+        resize: true,
+        colors: [
+            {% for s in roi_statistic %}
+                '{{ s.color }}',
+            {% endfor %}
+        ]
+    });
+</script>
+{% endblock %}
