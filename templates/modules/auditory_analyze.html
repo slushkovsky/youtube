@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block page_head %}
-<link href="css/plugins/morris/morris-0.4.3.min.css" rel="stylesheet">
+<link href="/static/css/plugins/jasny/jasny-bootstrap.min.css" rel="stylesheet">
 {% endblock %}
 
 {% block page_title %}
@@ -10,109 +10,62 @@
 
 {% block page_content %}
 
-{% endblock %}
+<div class="container-fluid">
+    <form
+        class="form-horizontal"
+        method="post"
+        enctype="multipart/form-data"
+    >
+        <div class="col-md-8">
+            <label class="control-label">Выбрать файл базы каналов</label>
+            <div class="fileinput fileinput-new input-group" data-provides="fileinput">
+                <div class="form-control" data-trigger="fileinput">
+                    <i class="glyphicon glyphicon-file fileinput-exists"></i>
+                <span class="fileinput-filename" style="overflow: hidden"></span>
+                </div>
+                <span class="input-group-addon btn btn-default btn-file">
+                    <span class="fileinput-new">Select file</span>
+                    <span class="fileinput-exists">Change</span>
+                    <input type="file" name="links" id="links"/>
+                </span>
+                <a href="#" class="input-group-addon btn btn-default fileinput-exists"
+                   data-dismiss="fileinput">
+                    Remove
+                </a>
+            </div>
+            {{ form.errors.links }}
+        </div>
+        <div class="col-md-4">
+            <label class="control-label" style="color: transparent">
+                .
+            </label>
+            <div>
+                <input
+                    type="submit" value="Анализировать" class="btn btn-primary"
+                >
+            </div>
+        </div>
+    </form>
+</div>
 
-{% block scipts %}
-<script src="js/plugins/morris/raphael-2.1.0.min.js"></script>
-<script src="js/plugins/morris/morris.js"></script>
-<script>
 {% if result.status %}
-    Morris.Area({
-        element: 'comments-chart',
-        data: [
-            {% for m in result.details.statistics %}
-                {
-                    period: '{{ m.datetime }}',
-                    comments: {{ m.comments }}
-                },
+    <div class="page-title wrapped">
+        <h2>
+            Результаты
+        </h2>
+    </div>
+    <table>
+		<body> 
+			{% for item in results.top.channels %}
+				<tr><td>{{ item }}</td></tr> 
             {% endfor %}
-        ],
-        xkey: 'period',
-        ykeys: ['comments'],
-        labels: ['Комментарии'],
-        hideHover: false,
-        resize: true,
-        lineColors: ['#87d6c6'],
-        lineWidth:2,
-        pointSize:1
-    });
-    Morris.Area({
-        element: 'subscribers-chart',
-        data: [
-            {% for m in result.details.statistics %}
-                {
-                    period: '{{ m.datetime }}',
-                    subscribers: {{ m.subscribers }}
-                },
-            {% endfor %}
-        ],
-        xkey: 'period',
-        ykeys: ['subscribers'],
-        labels: ['Подписчики'],
-        hideHover: false,
-        resize: true,
-        lineColors: ['#54cdb4'],
-        lineWidth:2,
-        pointSize:1
-    });
-    Morris.Area({
-        element: 'views-chart',
-        data: [
-            {% for m in result.details.statistics %}
-                {
-                    period: '{{ m.datetime }}',
-                    views: {{ m.views }}
-                },
-            {% endfor %}
-        ],
-        xkey: 'period',
-        ykeys: ['views'],
-        labels: ['Просмотры'],
-        hideHover: false,
-        resize: true,
-        lineColors: ['#b3c9d6'],
-        lineWidth:2,
-        pointSize:1
-    });
-    Morris.Area({
-        element: 'likes-chart',
-        data: [
-            {% for m in result.details.statistics %}
-                {
-                    period: '{{ m.datetime }}',
-                    likes: {{ m.likes }}
-                },
-            {% endfor %}
-        ],
-        xkey: 'period',
-        ykeys: ['likes'],
-        labels: ['Лайки'],
-        hideHover: false,
-        resize: true,
-        lineColors: ['#ef0c5c'],
-        lineWidth:2,
-        pointSize:1
-    });
-    Morris.Area({
-        element: 'grow-chart',
-        data: [
-            {% for m in result.details.statistics %}
-                {
-                    period: '{{ m.datetime }}',
-                    grow: {{ m.grow }}
-                },
-            {% endfor %}
-        ],
-        xkey: 'period',
-        ykeys: ['grow'],
-        labels: ['Коэффициент роста'],
-        hideHover: false,
-        resize: true,
-        lineColors: ['#cd0900'],
-        lineWidth:2,
-        pointSize:1
-    });
+		</body> 
+    </table>
 {% endif %}
 
-</script>
+{% endblock %}
+
+
+{% block scipts %}
+<script src="js/plugins/jasny/jasny-bootstrap.min.js"></script>
 {% endblock %}

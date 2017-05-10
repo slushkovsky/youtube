@@ -15,7 +15,6 @@ def videos_by_description(request, context):
                 ), flags=IGNORECASE
             )
         )
-        print(videos)
         context['result']['status'] = True
         context['result']['details'] = list(grouper(videos, 3))
 

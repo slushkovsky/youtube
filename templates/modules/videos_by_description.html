@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block page_head %}
-    <link href="css/plugins/tagsinput/bootstrap-tagsinput.css" rel="stylesheet">
+    <link href="/static/css/plugins/tagsinput/bootstrap-tagsinput.css" rel="stylesheet">
     <style>
     .input-group .bootstrap-tagsinput {
         border-top-right-radius: 0;
@@ -53,8 +53,8 @@
 {% endif %}
 {% endblock %}
 
-{% block scipts %}
-    <script src="js/plugins/tagsinput/bootstrap-tagsinput.js"></script>
+{% block scripts %}
+    <script src="/static/js/plugins/tagsinput/bootstrap-tagsinput.js"></script>
     <script>
     document.getElementById('submit_form').onclick = function () {
         $('form').submit();

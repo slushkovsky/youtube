@@ -25,37 +25,46 @@
 </div>
 
 {% if result.status %}
-{% if result.details.video %}
-    <div class="page-title wrapped m-b-lg">
-        <h2>
-            Видео
-        </h2>
-    </div>
+	{% if result.details.video %}
+		<div class="page-title wrapped m-b-lg">
+			<h2>Видео</h2>
+		</div>
 
-    <div class="row m-b-lg">
-        <div class="col-md-6">
-            {% include 'modules/components/video_card.html' with video=result.details.video %}
+		<div class="row m-b-lg">
+			<div class="col-md-6">
+				{% include 'modules/components/video_card.html' with video=result.details.video %}
+			</div>
+		</div>
+	{% endif %}
+
+    {% if result.details.channels %}
+        <div class="page-title wrapped m-b-lg">
+            <h2>Каналы</h2>
         </div>
-    </div>
-{% endif %}
 
-{% if result.details.dbs %}
-<div class="page-title wrapped m-b-lg">
-    <h2>
-        Базы
-    </h2>
-</div>
-<div class="row m-lg">
-    {% for db in result.details.dbs %}
-        <div class="col-md-2 db-download-link {{ db.name }}">
-            <a href="{{ db.db }}">
-                <i class="fa fa-{{ db.name }}"></i>
-            </a>
-        </div>
-    {% endfor %}
-</div>
-{% endif %}
+        <table class="table"> 
+			<tbody>  	
+				{% for channel in result.details.channels %}
+					<tr>
+						<td><a href="{{ channel }}">{{ channel }}</i></a></td>
+					</tr>
+			{% endfor %}
+			</tbody> 
+		</table>
+    {% endif %}
 
+	{% if result.details.dbs %}
+		<div class="page-title wrapped m-b-lg">
+			<h2>Базы</h2>
+		</div>
+		<div class="row m-lg">
+			{% for db in result.details.dbs %}
+				<div class="col-md-2 db-download-link {{ db.name }}">
+					<a href="{{ db.db }}"><i class="fa fa-{{ db.name }}"></i></a>
+				</div>
+			{% endfor %}
+		</div>
+	{% endif %}
 {% endif %}
 
 {% endblock %}

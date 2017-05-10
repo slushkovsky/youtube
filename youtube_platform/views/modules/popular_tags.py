@@ -6,15 +6,16 @@ from ...yt_api import query_maker
 
 
 def popular_tags(request, context):
-    tags = query_maker.query_popular_tags(100)
+    tags = query_maker.query_popular_tags(10)
+
+    tags = tags[::-1]
 
     context['result']['details'] = [
         {
-            'place': p,
-            'tag': t['tag'],
-            'mentionCount': t['mentionCount']
+            'tag': tag,
+            'mentionCount': count
         }
-        for p, t in zip(count(1), tags)
+        for tag, count in tags
     ]
     context['result']['status'] = True
 

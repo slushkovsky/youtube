@@ -1,6 +1,7 @@
-from collections import defaultdict
+from collections import defaultdict, Counter
 from itertools import groupby
 from re import compile
+import operator
 
 
 class YtPlatformQuery(object):
@@ -15,6 +16,32 @@ class YtPlatformQuery(object):
         self._tags_collection = mongo_db.get_collection('yt_tags')
         self._popular_tags_collection = mongo_db.get_collection('yt_popular_tags')
 
+    def query_channels_audithory(self, channels_ids, top_count=5):
+        all_subs = []
+        all_categories = []
+
+        for channel_id in channels_ids: 
+            subs_list = self._channels_collection.find({'channelId': channel_id})[0].get("subsLink")  
+            if subs_list is not None: 
+                all_subs += [sub["channelUrl"] for sub in subs_list]
+ 
+            videos_list = self._videos_collection.find({'channelId': channel_id})
+
+            for video in videos_list: 
+                all_categories.append(video.get('categoryId'))
+
+        subs_counts = Counter(all_subs)
+        categories_counts = Counter(all_categories)
+
+        top_subs = sorted(subs_counts.items(), key=operator.itemgetter(1))[-top_count:]
+        top_categories = sorted(categories_counts.items(), key=operator.itemgetter(1))[-top_count:]
+
+        return {
+            'channels': [sub[0] for sub in top_subs], 
+            'categories': [cat[0] for cat in top_categories]
+        }
+
+             
     def query_users_channels(self, social_name, social_links):
         return [
             {
@@ -103,13 +130,7 @@ class YtPlatformQuery(object):
         if video.count == 0:
             return []
         video = video[0]
-        return [
-            {
-                'authorChannelUrl': c['authorChannelUrl'],
-                'authorChannelId': c['authorChannelId'],
-            }
-            for c in video['comments']
-        ]
+        return video['commentAuthors']
 
     def query_likers_from_video_id(self, video_id):
         likers = self._likes_collection.find(
@@ -148,12 +169,17 @@ class YtPlatformQuery(object):
         ]
 
     def query_popular_tags(self, limit=None):
-        q = self._popular_tags_collection.find().sort(
-            [('mentionCount', -1)]
-        )
-        if limit is not None:
-            q = q.limit(limit)
-        return list(q)
+        tags = {}
+        for obj in self._videos_collection.find():
+            for tag in obj['tags']:
+                tags[tag] = tags.get(tag, 0) + 1
+      
+        import operator
+        sorted_tags = sorted(tags.items(), key=operator.itemgetter(1))
+
+        if limit is not None: 
+            return sorted_tags[-limit:]
+        return sorted_tags
 
     def query_video_by_description(self, description):
         return list(self._videos_collection.find(

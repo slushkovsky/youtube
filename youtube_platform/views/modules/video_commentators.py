@@ -17,16 +17,20 @@ def video_commentators(request, context):
 
             c = query_maker.query_commentators_from_video_id(
                 video['videoId']
-            )
+			)
+
             res = query_maker.query_socials_by_channel_ids(
-                [channel['authorChannelId'] for channel in c]
+                c
             )
 
             dbs = create_social_bases(res)
 
-            if len(dbs) > 0:
+            if len(c) > 0:
                 context['result']['status'] = True
-                context['result']['details']['dbs'] = dbs
+                context['result']['details']['channels'] = c   
+
+                if len(dbs) > 0: 
+                    context['result']['details']['dbs'] = dbs
             else:
                 context['result']['status'] = True
                 context['result']['errors'] += [
@@ -35,6 +39,8 @@ def video_commentators(request, context):
         else:
             context['result']['status'] = False
             context['result']['errors'] += ['Видео не найдено']
+
+    print(context) 
 
     return render(
         request, 'modules/commentators.html', context
