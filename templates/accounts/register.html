@@ -3,13 +3,16 @@
 {% load widget_tweaks %}
 
 {% block page_content %}
-<h2>Регистрация</h2>
 <form method="post" action="">
 {% csrf_token %}
 
+<p style="margin-bottom: 1rem;">Впервые в нашей системе?<br>
+Моментальная регистрация!
+</p>
 {% for field in form %}
-    <div class="form-group">
-        <input class="form-control" type="{% if field.name == 'password1' or field.name == 'password2'%}password{% else %}  {{ field|field_type }} {%endif%}" placeholder="{{ field.label }}" name="{{ field.name }}" {% if field.value %}value="{{ field.value }}"{% endif %}>
+    <div class="form-group text-left" style="marin-top: 1rem;">
+        <label for="{{field.name}}">{{field.label}}</label>
+        <input id="{{field.name}}" class="form-control" type="{% if field.name == 'password1' or field.name == 'password2'%}password{% else %}  {{ field|field_type }} {%endif%}" placeholder="{{ field.label }}" name="{{ field.name }}" {% if field.value %}value="{{ field.value }}"{% endif %}>
         {% if field.errors %}
             <div class="alert alert-danger m-t">
                 {{ field.errors.as_text }}

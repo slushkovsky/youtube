@@ -56,21 +56,24 @@ class YtPlatformQuery(object):
         ]
 
 
-    def query_most_liked_among_channels(self, channel_ids):
-        likes = self._likes_collection.find(
-            {'channelId': {'$in': channel_ids}}
-        )
-        likes_per_video = defaultdict(int)
-        for l in likes:
-            likes_per_video[l['videoId']] += 1
+    def query_most_liked_among_channels(self, channel_ids, top_count=3):
+        channels = self._channels_collection.find({'channelId': {'$in': channel_ids}}) 
 
-        likes_per_channel = defaultdict(list)
-        for l in likes:
-            likes_per_channel[l['channelId']].append(l['videoId'])
+        all_liked = []        
+ 
+        for channel in channels: 
+            liked = channel.get('likePlaylist', [])
 
-        common_video = set().intersection(*likes_per_channel.values())
+            if liked is None: 
+                liked = []
+   
+            all_liked += liked 
 
-        return sorted(list(common_video))
+        liked_counts = Counter(all_liked) 
+
+        top = sorted(liked_counts.items(), key=operator.itemgetter(1))[-top_count:]
+
+        return [video[0] for video in top]
 
     def query_channel(self, channel_id):
         return self._channels_collection.find_one(

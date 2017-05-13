@@ -28,15 +28,19 @@ def top3_among_users(request, context):
             ]
             getattr(request, 'add_to_params')['links'] = channel_links
 
+            print(channel_ids) 
+
             if len(channel_ids) == 0:
                 context['result']['status'] = False
                 context['result']['errors'] += ['Список каналов пуст']
             else:
+                print(query_maker.query_most_liked_among_channels(channel_ids))
+
                 res = [
                     query_maker.query_video(vid)
                     for vid in query_maker.query_most_liked_among_channels(
                         channel_ids
-                    )[:3]
+                    )
                 ]
 
                 context['result']['status'] = True

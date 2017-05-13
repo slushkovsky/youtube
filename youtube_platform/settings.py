@@ -28,6 +28,15 @@ DEBUG = True
 ALLOWED_HOSTS = ['127.0.0.1', '88.212.253.235', 'adytools.ru', 'adytools.com', 'localhost']
 
 
+# Mailer 
+EMAIL_HOST = 'smtp.yandex.ru'
+EMAIL_HOST_USER = 'adytools.robot@yandex.ru'
+EMAIL_HOST_PASSWORD = 'qwertyqaz12345'
+EMAIL_PORT = 465
+EMAIL_USE_SSL = True
+SERVER_EMAIL = EMAIL_HOST_USER
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -105,6 +114,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+AUTH_USER_MODEL = 'youtube_platform.User'
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.10/topics/i18n/
@@ -158,6 +168,3 @@ CURRENCIES = ('USD', 'RUB')
 LOGOUT_REDIRECT_URL = '/accounts/login'
 LOGIN_URL = '/accounts/login'
 
-# Email settings
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-DEFAULT_FROM_EMAIL = 'admin@ytplatform.ru'

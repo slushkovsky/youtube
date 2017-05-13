@@ -75,4 +75,6 @@ def process_roi(request):
     except ROILink.DoesNotExist:
         return HttpResponseNotFound()
 
+    print(roi.link)
+
     return HttpResponseRedirect(roi.link)

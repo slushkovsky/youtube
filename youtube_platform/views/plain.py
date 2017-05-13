@@ -16,6 +16,9 @@ def handle_plains(request):
         plain = request.GET['plain']
         # After purchasing we can add new permission
         plain = Plain.objects.get(id=int(plain))
+
+        print(plain.get_permission())
+
         request.user.profile.add_perm(plain.get_permission())
 
         context['result']['status'] = True

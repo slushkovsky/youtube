@@ -118,7 +118,7 @@ window.SmoothlyMenu = function() {
         // For smoothly turn on menu
         setTimeout(
             function () {
-                $('#side-menu').fadeIn(500);
+                $('#side-menu').show();
             }, 100);
     } else if ($('body').hasClass('fixed-sidebar')){
         $('#side-menu').hide();

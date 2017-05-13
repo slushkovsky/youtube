@@ -40,8 +40,6 @@ def video_commentators(request, context):
             context['result']['status'] = False
             context['result']['errors'] += ['Видео не найдено']
 
-    print(context) 
-
     return render(
         request, 'modules/commentators.html', context
     )

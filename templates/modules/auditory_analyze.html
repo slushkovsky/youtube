@@ -54,13 +54,28 @@
             Результаты
         </h2>
     </div>
-    <table>
-		<body> 
-			{% for item in results.top.channels %}
-				<tr><td>{{ item }}</td></tr> 
-            {% endfor %}
-		</body> 
-    </table>
+	<div class="row"> 
+		<div class="col-md-6 text-center"> 
+            <h3>Каналы</h3>
+ 			<table style="display: inline-block;">
+				<tbody> 
+					{% for item in result.details.channels %}
+						<tr><td><a href="{{ item }}">{{ item }}</a></td></tr> 
+					{% endfor %}
+				</tbody> 
+			</table>
+       </div>
+       <div class="col-md-6 text-center">
+           <h3>Категории</h3> 
+           <table style="display: inline-block;"> 
+               <tbody> 
+                   {% for item in result.details.categories %}
+                       <tr><td>{{ item }}</td></tr> 
+                   {% endfor %}
+               </tbody> 
+           </table> 
+       </div>
+    </div>
 {% endif %}
 
 {% endblock %}

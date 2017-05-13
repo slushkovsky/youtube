@@ -3,12 +3,10 @@
 {% load widget_tweaks %}
 
 {% block page_content %}
-<h2>Добро пожаловать</h2>
-<p>Войдите, что бы увидеть это в действии.</p>
 <form class="m-t" role="form" method="post" action="?success_redirect=/accounts/profile">
     {% csrf_token %}
     <div class="form-group">
-        {{ form.username|attr:"placeholder:Введите username"|add_class:"form-control" }}
+        {{ form.username|attr:"placeholder:Введите email"|add_class:"form-control" }}
     </div>
     <div class="form-group">
         {{ form.password|attr:"placeholder:Введите пароль"|add_class:"form-control" }}
@@ -33,5 +31,4 @@
         Создать аккаунт
     </a>
 </form>
-
 {% endblock %}

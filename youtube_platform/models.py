@@ -1,20 +1,82 @@
 import datetime
 import json
+import uuid
 from uuid import uuid4
 
-import pytz
 from dateutil.relativedelta import relativedelta
 from django.conf import settings
 from django.contrib.auth.models import Permission
 from django.db.models import ManyToManyField
 from django.db.models import (
-    Model, OneToOneField, CASCADE, URLField, BooleanField,
-    CharField, DateTimeField, IntegerField, ForeignKey, TextField, UUIDField,
+    Model, OneToOneField, EmailField, CASCADE, URLField, BooleanField,
+    CharField, DateTimeField, IntegerField, ForeignKey, TextField, UUIDField, Manager
 )
 from django.db.models.base import ObjectDoesNotExist
 from djmoney.models.fields import MoneyField
+from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
+from django.core.mail import send_mail
 
 from youtube_platform.service_permission import ServicePermission
+
+class UserManager(BaseUserManager): 
+    def create(self, email, password, **extra_fields): 
+        if not email:
+            raise ValueError('The Email must be set')
+        email = self.normalize_email(email)
+        
+        user = self.model(email=email, **extra_fields)
+        user.set_password(password)
+        user.save()
+   
+        user.request_confirmation()
+           
+        return user
+
+class User(AbstractBaseUser, PermissionsMixin):    
+    email            = EmailField(unique=True)
+    is_active        = BooleanField(default=True) 
+    activation_token = UUIDField(unique=True, null=True)
+
+    USERNAME_FIELD = 'email'
+    objects = UserManager()
+
+    def __str__(self): 
+        return self.email 
+
+    def request_confirmation(self): 
+        token = uuid.uuid4()
+
+        message = f'''
+        Добрый день!
+        Вы успешно прошли регистрацию на нашем сервере.
+        До использования ADYtools остался всего один шаг!
+        Подтвердите свою регистрацию по ссылке :
+        http://adytools.com/platform/confirm?token={token}
+
+        Получайте трафик с YouTube вместе с нами! ;)
+        '''
+
+#        from django.core.mail import EmailMessage
+#
+#        EmailMessage(
+#           'Hello',
+#            message,
+#          'from@example.com',
+#           ['s.lushkovsky@gmail.com']).send()
+
+#        send_mail(
+#           'Confirm your email | Adytools',
+#           f'http://adytools.com/platrom/confirm_email?token={token}',
+#           'adytools.robot@yandex.ru',
+#           [self.email],
+#           fail_silently=False,
+#        )
+
+    def get_full_name(self):
+        return self.email
+ 
+    def get_short_name(self):
+        return self.email   
 
 
 class Plain(Model):
@@ -69,7 +131,7 @@ class AccountType(Model):
 
     @property
     def day_excess(self):
-        now = pytz.utc.localize(datetime.datetime.now())
+        now = datetime.datetime.now(datetime.timezone.utc)
         delta = self.expiry_at - now
         return delta.days
 
@@ -84,38 +146,40 @@ class Profile(Model):
     user = OneToOneField(
         settings.AUTH_USER_MODEL, related_name='profile', on_delete=CASCADE
     )
-    channel_url = URLField()
+    channel_url = URLField(null=True)
     channel_id = CharField(max_length=255)
 
     account_type = OneToOneField(AccountType, on_delete=CASCADE)
 
     def has_perm(self, permission: ServicePermission):
-        now_aware = pytz.utc.localize(datetime.datetime.now())
+        now_aware = datetime.datetime.now(datetime.timezone.utc)
         if self.account_type.expiry_at < now_aware:
             return False
 
         plain = Plain.get_by_permission(permission)
         current_plain = self.account_type.plain
+
+        print(current_plain.permission_level, plain.permission_level)
+
         return current_plain.permission_level >= plain.permission_level
 
     def add_perm(self, permission: ServicePermission, expiry_at=None):
         if expiry_at is None:
-            expiry_at = pytz.utc.localize(datetime.datetime.now())
-            expiry_at += datetime.timedelta(days=30)
+            expiry_at = datetime.datetime.now(datetime.timezone.utc) + datetime.timedelta(days=30)
+        
         self.account_type.plain = Plain.get_by_permission(permission)
         self.account_type.expiry_at = expiry_at
         self.account_type.save()
         self.save()
 
     @staticmethod
-    def create_with_permission(user, channel_url, permission):
-        now_aware = pytz.utc.localize(datetime.datetime.now())
-        now_aware += relativedelta(month=1)
+    def create_with_permission(user, permission):
+        now_aware = datetime.datetime.now() + datetime.timedelta(days=30)  
+ 
         profile = Profile.objects.create(
-            channel_url=channel_url, account_type=AccountType.create_perm(
-                permission, now_aware
-            ), user=user
+            account_type=AccountType.create_perm(permission, now_aware), user=user
         )
+        print('Profile created') 
         return profile
 
 

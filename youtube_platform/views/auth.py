@@ -1,8 +1,8 @@
 from django import forms
+from django.contrib.auth import authenticate, login
 from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm, SetPasswordForm
-from django.contrib.auth.models import User
 from django.contrib.auth.views import (
     login as auth_login, logout as auth_logout, password_reset,
     password_reset_done, password_reset_confirm, password_reset_complete
@@ -12,35 +12,22 @@ from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 
 from youtube_platform.service_permission import ServicePermission
-from ..models import Profile
+from ..models import Profile, User
 
 
-class MyRegistrationForm(UserCreationForm):
+class RegistrationForm(UserCreationForm):
     email = forms.EmailField(required=True)
-    first_name = forms.CharField(required=False)
-    last_name = forms.CharField(required=False)
-
-    youtube_channel_url = forms.URLField()
 
     class Meta:
         model = User
-        fields = ('username', 'email', 'password1', 'password2')
+        fields = ('email', 'password1', 'password2')
 
     def save(self, commit=True):
-        user = super(MyRegistrationForm, self).save(commit=False)
-        user.email = self.cleaned_data['email']
-        user.first_name = self.cleaned_data['first_name']
-        user.last_name = self.cleaned_data['last_name']
-
-        if commit:
-            user.save()
-
-        Profile.create_with_permission(
-            user, self.cleaned_data['youtube_channel_url'],
-            ServicePermission.base
-        )
+        user = User.objects.create(self.cleaned_data['email'], self.cleaned_data['password1']) 
+        Profile.create_with_permission(user, ServicePermission.base)
 
         return user
+
 
 @csrf_exempt
 def login(request):
@@ -82,13 +69,12 @@ def forgot_password(request):
 
 def register(request):
     if request.method == 'POST':
-        print(request.POST)
-        form = MyRegistrationForm(request.POST)
+        form = RegistrationForm(request.POST)
         if form.is_valid():
             form.save()
             return HttpResponseRedirect('/accounts/login')
     else:
-        form = MyRegistrationForm()
+        form = RegistrationForm()
 
     args = {
         'form': form

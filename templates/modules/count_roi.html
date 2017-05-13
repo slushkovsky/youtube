@@ -57,7 +57,7 @@
                             {{ s.label }}
                         </td>
                         <td>
-                            <a href="http{% if request.is_secure %}s{% endif %}://{{ request.get_host }}/roi?id={{ s.uuid }}"
+                            <a href="http{% if request.is_secure %}s{% endif %}://{{ request.get_host }}/platform/roi?id={{ s.uuid }}"
                             >{{ s.uuid }}</a>
                         </td>
                         <td>
