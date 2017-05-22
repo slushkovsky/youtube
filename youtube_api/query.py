@@ -95,6 +95,9 @@ class YtPlatformQuery(object):
             {'videoUrl': video_url}
         )
 
+    def query_video_likes(self, video_url):
+        return self._channels_collection.find({'likePlaylist': {'$in': [video_url.split('=')[-1]]}})
+
     def query_top_video(self, limit=None):
         q = self._videos_collection.find().sort(
             [('viewCount', -1), ('likeCount', -1), ('commentCount', -1)]
@@ -104,9 +107,8 @@ class YtPlatformQuery(object):
         return list(q)
 
     def query_channel_statistic(self, channel_id):
-        return list(self._statistic_collection.find(
-            {'channelId': channel_id},
-            {'statistics': 1, 'datetime': 1}
+        return list(self._channels_collection.find(
+            {'channelId': channel_id}
         ))
 
     def query_collaborators(self, channel_id):

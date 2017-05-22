@@ -15,6 +15,59 @@
     <link href="/static/css/animate.css" rel="stylesheet">
     <link href="/static/css/styleNew.css" rel="stylesheet">
 
+    <style> 
+  #loader {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  z-index: 1;
+  width: 150px;
+  height: 150px;
+  margin: -75px 0 0 -75px;
+  border: 16px solid #f3f3f3;
+  border-radius: 50%;
+  border-top: 16px solid #3498db;
+  width: 120px;
+  height: 120px;
+  -webkit-animation: spin 2s linear infinite;
+  animation: spin 2s linear infinite;
+}
+
+@-webkit-keyframes spin {
+  0% { -webkit-transform: rotate(0deg); }
+  100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Add animation to "page content" */
+.animate-bottom {
+  position: relative;
+  -webkit-animation-name: animatebottom;
+  -webkit-animation-duration: 1s;
+  animation-name: animatebottom;
+  animation-duration: 1s
+}
+
+@-webkit-keyframes animatebottom {
+  from { bottom:-100px; opacity:0 } 
+  to { bottom:0px; opacity:1 }
+}
+
+@keyframes animatebottom { 
+  from{ bottom:-100px; opacity:0 } 
+  to{ bottom:0; opacity:1 }
+}
+
+#myDiv {
+  display: none;
+  text-align: center;
+}
+</style>
+
     {% block page_head %}
     {% endblock %}
 </head>
@@ -52,10 +105,12 @@
                             >
                                 {{ user_email }}
                             </a>
-                            <hr style="margin: .5rem;"> 
+                            <hr style="margin: .5rem;">
+                            {% if permission_level > 1 %} 
                             <span class="label label-success label-days-left">
                                 Осталось {{ expiry_in_days }} дней
                             </span>
+                            {% endif %}
                         {#</div>#}
                     </li>
                 </ul>
@@ -63,16 +118,26 @@
             </nav>
     </div>
 
+    <div id="loader" style="display:none; position: fixed; top:50%; left: 50%; transform: (-50%, -50%);"></div>
     <nav class="navbar-default navbar-static-side" role="navigation">
         <div class="sidebar-collapse">
             <ul class="nav" id="side-menu">
                 <li class="main">
-                    <a href="http://adytools.com/platform/plain">
+                    <a href="/plain">
                         <i class="fa fa-search" aria-hidden="true"></i>
                         <span class="nav-label">Главная</span>
                     </a>
                 </li>
+                {% if permission_level > 1 %}
+                <li> 
+                    <a href="http://adytools.com/platform/module?feature=smart_search">
+                        <img src="/static/img/icons/smart_search.png">
+                        <span class="nav-label">Умный поиск</span>
+                    </a>
+                </li>
+                {% endif %}
                 {% for p in plains %}
+                {% if forloop.counter0 != 0 %}
                 <li class="tariff-li">
                     <a href="/plain">
                         <i class="fa {{ p.icon }}" aria-hidden="true">
@@ -80,6 +145,7 @@
                         <span class="nav-label">Пакет {{ p.title }}</span>
                     </a>
                 </li>
+                {% endif %} 
                 {% endfor %}
                 <hr>
                 {% for item_name, permission, subitems in menu_items %}
@@ -90,10 +156,10 @@
                         <i class="fa {% if permission %}fa-unlock{% else %}fa-lock{% endif %}"></i>
                         <span class="nav-label">{{ item_name }}</span>
                     </a> </li>
-                {% for su_title, href in subitems %}
+                {% for su_title, href, icon in subitems %}
                 <li {% if not permission %}class="disabled"{% endif %}>
                     <a {% if permission %}href='{{ href }}'{% endif %} style="max-width: 80%;">
-                        <span class="nav-label">{{ su_title }}</span>
+                        <img src="{{ icon }}"> <span class="nav-label">{{ su_title }}</span>
                     </a>
                 </li>
                 {% endfor %}
@@ -173,6 +239,15 @@
 
 <script type="text/javascript" src="http://cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.js"></script>
 <link rel="stylesheet" type="text/css" href="http://cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.css" />
+
+
+
+<script>
+function showLoader() {
+  document.getElementById("loader").style.display = "block";
+}
+</script>
+
 
 {% block scripts %}{% endblock %}
 </body>

@@ -64,8 +64,6 @@ def smart_search(request, context):
         videos = query_maker.query_smart_search(
             **validated
         )
-     
-        videos=[1, 2, 3]
 
         context['result']['errors'] = errors
         context['result']['status'] = True

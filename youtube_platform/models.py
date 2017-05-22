@@ -2,6 +2,7 @@ import datetime
 import json
 import uuid
 from uuid import uuid4
+import subprocess
 
 from dateutil.relativedelta import relativedelta
 from django.conf import settings
@@ -46,31 +47,11 @@ class User(AbstractBaseUser, PermissionsMixin):
     def request_confirmation(self): 
         token = uuid.uuid4()
 
-        message = f'''
-        Добрый день!
-        Вы успешно прошли регистрацию на нашем сервере.
-        До использования ADYtools остался всего один шаг!
-        Подтвердите свою регистрацию по ссылке :
-        http://adytools.com/platform/confirm?token={token}
+        message = f'Добрый день!\nВы успешно прошли регистрацию на нашем сервере.До использования ADYtools остался всего один шаг! Подтвердите свою регистрацию по ссылке :\nhttp://platform.adytools.com/confirm?token={token}\n\nПолучайте трафик с YouTube вместе с нами! ;)'
+        subject = 'Confirm your email | Adytools' 
 
-        Получайте трафик с YouTube вместе с нами! ;)
-        '''
+        subprocess.call(f'echo "{message}" | mail -s "$(echo -e "{subject}\nContent-Type: text/html")" -r robot@adytools.com "{self.email}"'.encode('utf-8'), shell=True) 
 
-#        from django.core.mail import EmailMessage
-#
-#        EmailMessage(
-#           'Hello',
-#            message,
-#          'from@example.com',
-#           ['s.lushkovsky@gmail.com']).send()
-
-#        send_mail(
-#           'Confirm your email | Adytools',
-#           f'http://adytools.com/platrom/confirm_email?token={token}',
-#           'adytools.robot@yandex.ru',
-#           [self.email],
-#           fail_silently=False,
-#        )
 
     def get_full_name(self):
         return self.email
@@ -113,9 +94,10 @@ class Plain(Model):
         }
 
     LEVEL_TO_PERMISSION = {
-        1: ServicePermission.base,
-        2: ServicePermission.standart,
-        3: ServicePermission.premium
+        1: ServicePermission.initial,
+        2: ServicePermission.base,
+        3: ServicePermission.standart,
+        4: ServicePermission.premium
     }
 
     PERMISSION_TO_LEVEL = {
@@ -141,7 +123,6 @@ class AccountType(Model):
             plain=Plain.get_by_permission(permission), expiry_at=expiry_at
         )
 
-
 class Profile(Model):
     user = OneToOneField(
         settings.AUTH_USER_MODEL, related_name='profile', on_delete=CASCADE
@@ -158,8 +139,6 @@ class Profile(Model):
 
         plain = Plain.get_by_permission(permission)
         current_plain = self.account_type.plain
-
-        print(current_plain.permission_level, plain.permission_level)
 
         return current_plain.permission_level >= plain.permission_level
 
@@ -179,7 +158,6 @@ class Profile(Model):
         profile = Profile.objects.create(
             account_type=AccountType.create_perm(permission, now_aware), user=user
         )
-        print('Profile created') 
         return profile
 
 
@@ -208,6 +186,7 @@ class Feature(Model):
     in_menu = BooleanField(default=True)
     plain_required = ForeignKey(Plain)
     parameters = ManyToManyField(FeatureParameter, related_name='feature')
+    icon = CharField(max_length=128, null=True) 
 
     @classmethod
     def get_by_name(cls, name):

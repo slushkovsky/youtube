@@ -10,9 +10,11 @@
 
 <div class="row">
     {% for plain in plains %}
+    {% if forloop.counter0 != 0 %}
     <div class="col-md-4">
         {% include 'modules/components/plain_view.html' with plain=plain %}
     </div>
+    {% endif %}
     {% endfor %}
 </div>
 

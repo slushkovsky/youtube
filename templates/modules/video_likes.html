@@ -14,14 +14,19 @@
     <form
         class="form-horizontal"
         method="post"
-        action="module?feature=video_likes"
+        action="module?feature=get_likes"
         enctype="multipart/form-data"
     >
         <div class="col-md-4">
-            <label class="control-label">Cсылка на канал</label>
+            <label class="control-label">Cсылка на видео</label>
             <input type="text" name="video_url" class="form-control">
             {{ form.errors.video_url }}
         </div>
+
+        <div class="col-md-4 {% if permission_level < 4 %}hide{% endif %}"> 
+            <label class="control-label">Не позже чем за (дней)</label> 
+            <input type="number" value="0" name="period" class="form-control">  
+        </div> 
 
         <div class="col-md-4">
             <label class="control-label" style="color: transparent">
@@ -41,8 +46,16 @@
         <h2>
             Результаты
         </h2>
+
+        <table>
+            {% for channel in result.details %}
+			<tr> 
+                <td><a href="http://youtube.com/channel/{{ channel }}">{{ channel }}<a></td> 
+            </tr> 
+            {% endfor %}
+        </table>
     </div>
-        <p>{{ result.details }} лайков</p>  
+          
 
      
 {% endif %}

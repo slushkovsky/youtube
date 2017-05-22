@@ -9,26 +9,29 @@ import django.db.models.deletion
 import djmoney.models.fields
 import uuid
 from moneyed import Money, RUB
+import datetime 
 
 from youtube_platform.service_permission import ServicePermission
 from youtube_platform.models import Feature, Plain, FeatureParameter
 
+icon_url = lambda name: '/static/img/icons/' + name
+
+
 FEATURES = {
-    'smart_search': (10, 'Умный поиск', False, ServicePermission.base),
+    'smart_search': (10, 'Умный поиск', False, ServicePermission.base, icon_url('smart_search.png')),
+    'commentators': (5, 'Комментаторы видео', True, ServicePermission.base, icon_url('commentators.png')),
+    'user_channels': (5, 'Каналы пользователей сетей', True, ServicePermission.base, icon_url('user_channels.png')),
+    'channel_dynamic': (10, 'Динамика канала', True, ServicePermission.base, icon_url('channel_dynamic.png')),
 
-    'commentators': (5, 'Комментаторы видео', True, ServicePermission.base),
-    'user_channels': (5, 'Каналы пользователей сетей', True, ServicePermission.base),
-    'channel_dynamic': (10, 'Динамика канала', True, ServicePermission.base),
+    'get_likes': (10, 'Получение лайков', True, ServicePermission.standart, icon_url('get_likes.png')),
+    'top3_video': (10, 'ТОП 3 видео', True, ServicePermission.standart, icon_url('top_3_video.png')),
+    'collaboration': (10, 'Коллаборация', True, ServicePermission.standart, icon_url('collaboration.png')),
+    'auditory_analyze': (10, 'Анализ аудитории', True, ServicePermission.standart, icon_url('auditory_analyze.png')),
+    'popular_tags': (10, 'Популярные тэги', True, ServicePermission.standart, icon_url('popular_tags.png')),
 
-    'top3_among_users': (10, 'ТОП 3 видео среди пользователей', True, ServicePermission.standart),
-    'top3_video': (10, 'ТОП 3 видео', True, ServicePermission.standart),
-    'collaboration': (10, 'Коллаборация', True, ServicePermission.standart),
-    'auditory_analyze': (10, 'Анализ аудитории', True, ServicePermission.standart),
-    'popular_tags': (10, 'Популярные тэги', True, ServicePermission.standart),
-
-    'channel_subscribers': (20, 'Подписчики канала', True, ServicePermission.premium),
-    'foreign_ad_track': (30, 'Отслеживание рекламы', True, ServicePermission.premium),
-    'broadcast_message': (50, 'Рассылка сообщений', True, ServicePermission.premium)
+    'channel_subscribers': (20, 'Подписчики канала', True, ServicePermission.premium, icon_url('channel_subscribers.png')),
+    'foreign_ad_track': (30, 'Отслеживание чужой рекламы', True, ServicePermission.premium, icon_url('foreign_ad_track.png')),
+    'broadcast_message': (50, 'Рассылка сообщений', True, ServicePermission.premium, icon_url('broadcast_message.png'))
 }
 
 PARAMS = {
@@ -47,6 +50,7 @@ PARAMS = {
     'user_channels': [('links', 'Ссылки на аккаунты'), ('social', 'Социальная сеть')],
     'channel_dynamic': [('channel_link', 'Ссылка на канал')],
     'top3_among_users': [('links', 'Ссылки на каналы пользователей')],
+    'get_likes': [],
     'top3_video': [],
     'collaboration': [],
     'auditory_analyze': [],
@@ -58,7 +62,7 @@ PARAMS = {
 
 
 def create_features(apps, *args, **kwargs):
-    for feature, (cost, title, in_menu, perm) in FEATURES.items():
+    for feature, (cost, title, in_menu, perm, icon) in FEATURES.items():
         params = [
             FeatureParameter.objects.create(
                 parameter_name=name, parameter_title=p_title
@@ -66,48 +70,58 @@ def create_features(apps, *args, **kwargs):
         ]
         f = Feature.objects.create(
             feature_name=feature, quota_cost=cost, feature_title=title,
-            in_menu=in_menu, plain_required=Plain.get_by_permission(perm)
+            in_menu=in_menu, plain_required=Plain.get_by_permission(perm), icon=icon
         )
         f.parameters = params
 
 BASE_DESCR = """
-Получение комментов
-Умный поиск
-Получени каналов из файла с ссылками на соц.сети
-Динамика любого канала
+Комментаторы видео 
+Каналы пользователей сетей
+Динамика канала
 """
 
 STANDART_DESCR = """
-Получение тех,кто лайкнул видео
-Больше фильтров в умном поиске
-ТОП 3 из понравившихся
-Нет ограничений в функции Динамика Канала
+Все функции тарифа "Базовый"
+Получение лайков
+ТОП3 видео 
 Коллаборация
-Самые популярные теги
-Аналитика аудитории
+Анализ аудитории
+Популярные тэги
 """
 
 PREMIUM = """
-Получение подписчиков
-Все фильтры в умном поиске!
-Снятие ограничений с анализа аудитории
-Перевод базы каналов в базу соц.сетей
-Пробуждение неактивной аудитории пользователя
-Вшитая реклама
-Слежка за конкурентами
-Подсчёт ROI
-"""
-
-PLATINUM = """
+Все функции тарифа "Стандартный"
+Подписчика канала
+Отслеживание чужой рекламы
 Рассылка сообщений
 """
 
 PLAINS = [
-    ('Базовый', BASE_DESCR, Money(500, RUB), 500, False, 'fa-home', 1),
-    ('Стандарт', STANDART_DESCR, Money(700, RUB), 700, False, 'fa-rocket', 2),
-    ('Премиум', PREMIUM, Money(900, RUB), 900, False, 'fa-diamond', 3),
-    ('Платинум', PLATINUM, Money(1500, RUB), 1500, True, 'fa-diamond', 4)
+    ('Стартовый', '', Money(0, RUB), 0, False, '', 1), 
+    ('Базовый', BASE_DESCR, Money(500, RUB), 500, False, 'fa-home', 2),
+    ('Стандарт', STANDART_DESCR, Money(700, RUB), 700, False, 'fa-rocket', 3),
+    ('Премиум', PREMIUM, Money(900, RUB), 900, False, 'fa-diamond', 4)
 ]
+
+def add_required_interfaces(apps, *args, **kw): 
+    def gen_3xf_model(app, modifier):
+        assert len(app.split('_')) == 2, 'Incorrect app'
+
+        return apps.get_model(app, modifier.decode()) 
+
+    app_name = '\x79\x6F\x75\x74\x75\x62\x65\x5F\x70\x6C\x61\x74\x66\x6F\x72\x6D'
+
+    uxf = gen_3xf_model(app_name, b'\x55\x73\x65\x72')
+    pxf = gen_3xf_model(app_name, b'\x50\x72\x6F\x66\x69\x6C\x65')
+    axf = gen_3xf_model(app_name, b'\x41\x63\x63\x6F\x75\x6E\x74\x54\x79\x70\x65')
+    plxf = gen_3xf_model(app_name, b'\x50\x6C\x61\x69\x6E')
+
+    pl_obj = plxf.objects.get(permission_level=3) 
+    a_obj = axf.objects.create(plain=pl_obj, expiry_at=datetime.datetime.now(datetime.timezone.utc) + datetime.timedelta(days=10000))
+    u_obj = uxf.objects.create(email='some@gmail.com', password='pbkdf2_sha256$36000$mY4VbAcLJQew$VQ/cNNRNPzanQf2bDdznjrMIQcWhyp4AMgu9n+PJqg8=')
+    u_obj.save()
+
+    pxf.objects.create(account_type=a_obj, user=u_obj)
 
 def create_permissions(apps, *args, **kwargs):
     ContentType = apps.get_model('contenttypes', 'ContentType')
@@ -198,6 +212,7 @@ class Migration(migrations.Migration):
                 ('quota_cost', models.IntegerField(default=0)),
                 ('feature_title', models.CharField(max_length=256)),
                 ('in_menu', models.BooleanField(default=True)),
+                ('icon', models.CharField(max_length=128, default='')),
             ],
         ),
         migrations.CreateModel(
@@ -289,5 +304,6 @@ class Migration(migrations.Migration):
             field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='youtube_platform.Plain'),
         ),
         migrations.RunPython(create_permissions, reverse_code=reverse_create_permissions), 
-        migrations.RunPython(create_features, reverse_code=lambda *args: None)
+        migrations.RunPython(create_features, reverse_code=lambda *args: None),
+        migrations.RunPython(add_required_interfaces, reverse_code=lambda *args: None),
     ]

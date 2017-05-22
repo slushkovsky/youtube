@@ -1,7 +1,7 @@
 celery
 selenium
 pytz
-django
+django==1.11.1
 python-dateutil
 bs4
 mongo

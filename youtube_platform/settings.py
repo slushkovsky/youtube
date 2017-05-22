@@ -25,17 +25,15 @@ SECRET_KEY = 'lg1g87^#*n(ovgukclhr@t2qrqf#axudwo!(h^s$w68-w4-g#*'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', '88.212.253.235', 'adytools.ru', 'adytools.com', 'localhost']
+ALLOWED_HOSTS = ['platform.adytools.com', '127.0.0.1', '88.212.253.235', 'localhost']
 
 
 # Mailer 
 EMAIL_HOST = 'smtp.yandex.ru'
-EMAIL_HOST_USER = 'adytools.robot@yandex.ru'
-EMAIL_HOST_PASSWORD = 'qwertyqaz12345'
-EMAIL_PORT = 465
-EMAIL_USE_SSL = True
-SERVER_EMAIL = EMAIL_HOST_USER
-DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'adytools@yandex.ru'
+EMAIL_HOST_PASSWORD = 'adytools2017'
+EMAIL_USE_TLS = True
 
 # Application definition
 

@@ -12,6 +12,7 @@ from .user_channels import users_channels
 from .video_commentators import video_commentators
 from .videos_by_description import videos_by_description
 from .auditory_analyze import auditory_analyze
+from .get_likes import get_likes
 
 FEATURE_HANDLERS = {
     'users_channels': users_channels,
@@ -25,6 +26,7 @@ FEATURES = {
     'channel_dynamic': (ServicePermission.base, channel_dynamic),
 
     'top3_among_users': (ServicePermission.standart, top3_among_users),
+    'get_likes': (ServicePermission.standart, get_likes),
     'top3_video': (ServicePermission.standart, top3_video),
     'collaboration': (ServicePermission.standart, collaboration),
     'auditory_analyze': (ServicePermission.standart, auditory_analyze),

@@ -8,7 +8,7 @@ from django.contrib.auth.views import (
     password_reset_done, password_reset_confirm, password_reset_complete
 )
 from django.http import HttpResponseRedirect
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.views.decorators.csrf import csrf_exempt
 
 from youtube_platform.service_permission import ServicePermission
@@ -17,14 +17,17 @@ from ..models import Profile, User
 
 class RegistrationForm(UserCreationForm):
     email = forms.EmailField(required=True)
+    channel_url = forms.URLField() 
 
     class Meta:
         model = User
-        fields = ('email', 'password1', 'password2')
+        fields = ('email', 'password1', 'password2', 'channel_url')
 
     def save(self, commit=True):
         user = User.objects.create(self.cleaned_data['email'], self.cleaned_data['password1']) 
-        Profile.create_with_permission(user, ServicePermission.base)
+        p = Profile.create_with_permission(user, ServicePermission.initial)
+        p.channel_url = self.cleaned_data['channel_url']
+        p.save() 
 
         return user
 
@@ -82,6 +85,8 @@ def register(request):
 
     return render(request, 'accounts/register.html', args)
 
+def confirm_email(request): 
+	return redirect('/accounts/profile')
 
 @login_required(redirect_field_name=None, login_url='login')
 def change_password(request):

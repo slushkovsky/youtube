@@ -23,7 +23,7 @@
         {% for tag in result.details %}
             <tr>
                 <td>
-                    {{ tag.place }}
+                    {{ forloop.counter0|add:"1" }}
                 </td>
                 <td>
                     {{ tag.tag }}
